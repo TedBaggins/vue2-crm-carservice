@@ -1,11 +1,11 @@
 <template>
-    <div class="container-fluid">
+    <div class="container-fluid auth-page">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="form-auth-box">
+                    <div class="form-auth-box box-transparent">
                         <form @submit.prevent="handleLogin">
-                            <p class="form-auth-title">Авторизация</p>
+                            <img class="form-auth-logo" :src="require('@/assets/logo-carservice.png')"/>
                             <div class="form-group row">
                                 <label for="form-auth-login" class="col-sm-2 col-form-label">Логин</label>
                                 <div class="col-sm-10">
@@ -37,9 +37,9 @@
                             </div>
 
                             <div class="form-group">
-                                <button class="btn btn-success btn-block form-auth-submit-btn" :disabled="loading">
+                                <button class="btn-base btn-prime btn-block form-auth-submit-btn" :disabled="loading">
                                     <span v-show="loading" class="spinner-border spinner-border-sm"></span>
-                                    <span>Login</span>
+                                    <span>Войти</span>
                                 </button>
                             </div>
                         </form>
@@ -55,6 +55,7 @@
     import { ValidationProvider, extend } from 'vee-validate';
     import { required } from 'vee-validate/dist/rules';
     import { actionTypes } from "@/store/modules/auth";
+    // import logo from "@/assets/logo-carservice.png";
 
     extend('required', {
         ...required,
@@ -106,23 +107,19 @@
 </script>
 
 <style>
+    .auth-page {
+        height: 100%;
+    }
     .form-auth-box {
-        margin: 100px auto 20px;
-        padding: 25px;
+        margin: 150px auto 20px;
         max-width: 400px;
-        border: 1px solid #dedede;
-        border-radius: 10px;
-        background-color: #fff;
-        box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+        /*font-family: Gordita,Helvetica Neue,Helvetica,Arial,sans-serif;*/
     }
-    .form-auth-title {
-        text-align: center;
-        font-size: 22px;
-        margin-bottom: 20px;
-        font-weight: 600;
-    }
-    .input-error {
-        color: #ec2c2c;
+    .form-auth-logo {
+        display: block;
+        margin: 10px auto 25px;
+        max-height: 90px;
+        max-width: 210px;
     }
     .form-auth-submit-btn .spinner-border {
         margin-bottom: 5px;
@@ -130,6 +127,6 @@
     }
     .form-auth-submit-btn {
         max-width: 150px;
-        margin: 20px auto 10px;
+        margin: 30px auto 10px;
     }
 </style>

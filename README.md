@@ -1,4 +1,4 @@
-# vue2-carservice
+# vue2-crm-carservice
 
 ## Project setup
 ```
