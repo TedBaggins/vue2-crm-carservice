@@ -13,9 +13,24 @@
 <script>
 
 export default {
-  name: 'Home',
-  components: {
+    name: 'Home',
+    components: {
 
-  }
+    },
+    mounted() {
+        switch (this.$store.state.auth.user.role) {
+            case "admin":
+                this.$router.push('Admin');
+                break;
+            case "manager":
+                this.$router.push('Manager');
+                break;
+            case "master":
+                this.$router.push('Master');
+                break;
+            default:
+                this.$router.push('Login');
+        }
+    }
 }
 </script>

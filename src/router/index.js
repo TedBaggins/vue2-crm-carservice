@@ -20,19 +20,43 @@ const routes = [
         path: '/admin',
         name: 'Admin',
         // lazy-loaded
-        component: () => import('@/views/BoardAdmin.vue')
+        component: () => import('@/views/admin/Admin.vue')
+    },
+    {
+        path: '/admin/admins',
+        name: 'AdminAdmins',
+        // lazy-loaded
+        component: () => import('@/views/admin/Admin.vue')
+    },
+    {
+        path: '/admin/managers',
+        name: 'AdminManagers',
+        // lazy-loaded
+        component: () => import('@/views/admin/AdminManagers.vue')
+    },
+    {
+        path: '/admin/masters',
+        name: 'AdminMasters',
+        // lazy-loaded
+        component: () => import('@/views/admin/AdminMasters.vue')
+    },
+    {
+        path: '/admin/services',
+        name: 'AdminServices',
+        // lazy-loaded
+        component: () => import('@/views/admin/AdminServices.vue')
     },
     {
         path: '/manager',
         name: 'Manager',
         // lazy-loaded
-        component: () => import('@/views/BoardManager.vue')
+        component: () => import('@/views/manager/Manager.vue')
     },
     {
         path: '/master',
         name: 'Master',
         // lazy-loaded
-        component: () => import('@/views/BoardMaster.vue')
+        component: () => import('@/views/master/Master.vue')
     },
 ]
 
