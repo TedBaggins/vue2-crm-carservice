@@ -138,4 +138,10 @@
     .leftmenu-box ul li i {
         padding-right: 8px;
     }
+
+    /* TABLES */
+    .table-box {
+        margin-top: 50px;
+        text-align: center;
+    }
 </style>
