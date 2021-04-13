@@ -69,7 +69,6 @@
         overflow: hidden;
         transition: all 0.3s ease;
         font-weight: 500;
-        width: 110px;
     }
     .btn-round {
         padding: 5px 10px;
@@ -85,23 +84,32 @@
     .btn-round:hover {
         background: #7f8084;
     }
-    .btn-prime {
+    .btn-orange {
         background: rgba(236, 143, 106, 0.7);
         border-color: rgba(236, 143, 106, 0.7);
         color: #fff;
     }
-    .btn-prime:hover {
+    .btn-orange:hover {
         border-color: rgba(230, 109, 61, 0.7);
         background: rgba(230, 109, 61, 0.7);
     }
-    .btn-second {
+    .btn-blue {
         color: #fff;
         border-color: rgba(139, 186, 187, 0.7);
         background: rgba(139, 186, 187, 0.7);
     }
-    .btn-second:hover {
+    .btn-blue:hover {
         border-color: rgba(107, 167, 168, 0.8);
         background: rgba(107, 167, 168, 0.8);
+    }
+    .btn-red {
+        color: #fff;
+        border-color: rgba(230, 61, 61, 0.7);
+        background: rgba(230, 61, 61, 0.7);
+    }
+    .btn-red:hover {
+        border-color: rgba(210, 57, 57, 0.7);
+        background: rgba(210, 57, 57, 0.7);
     }
     .btn-shadow {
         color: #d4d4d4;
@@ -140,8 +148,43 @@
     }
 
     /* TABLES */
-    .table-box {
+    .content-box {
         margin-top: 50px;
+    }
+    .table-panel-box {
+        margin-bottom: 30px;
+    }
+    .table-box {
         text-align: center;
+    }
+    .table-box button:first-child {
+        margin-right: 5px;
+    }
+
+    .loading-box {
+        margin-top: 50px;
+    }
+
+    /* MODAL */
+    .modal-content {
+        margin-top: 20%;
+        border-radius: 10px !important;
+    }
+    .modal-header {
+        background: #353535;
+        border-bottom: 1px solid #1f1f1f !important;
+    }
+    .modal-header button.close {
+        color: white;
+    }
+    .modal-header button.close:hover {
+        color: #cdcdcd;
+    }
+    .modal-body {
+        background: #4a4a4a;
+    }
+    .modal-footer {
+        border-top: 1px solid #1f1f1f !important;
+        background: #353535;
     }
 </style>

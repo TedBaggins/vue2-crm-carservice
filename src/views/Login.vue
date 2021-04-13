@@ -37,7 +37,7 @@
                             </div>
 
                             <div class="form-group">
-                                <button class="btn-base btn-prime btn-block form-auth-submit-btn" :disabled="loading">
+                                <button class="btn-base btn-orange btn-block form-auth-submit-btn" :disabled="loading">
                                     <span v-show="loading" class="spinner-border spinner-border-sm"></span>
                                     <span>Войти</span>
                                 </button>

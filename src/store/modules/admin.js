@@ -25,6 +25,20 @@ const actions = {
                     ctx.commit(mutationTypes.getAdminsFailure);
                 });
         });
+    },
+    [actionTypes.deleteAdmin](ctx, {id}) {
+        return new Promise(resolve => {
+            ctx.commit(mutationTypes.deleteAdminStart);
+            adminApi
+                .deleteAdmin(id)
+                .then(() => {
+                    ctx.commit(mutationTypes.deleteAdminSuccess);
+                    resolve();
+                })
+                .catch(() => {
+                    ctx.commit(mutationTypes.deleteAdminFailure);
+                });
+        });
     }
 }
 

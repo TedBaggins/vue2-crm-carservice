@@ -46,7 +46,7 @@
         display: block;
         max-width: 140px;
     }
-    button i {
+    .header-box button i {
         padding-right: 5px;
     }
 </style>
