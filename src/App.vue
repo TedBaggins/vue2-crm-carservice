@@ -41,11 +41,14 @@
         background: rgba(255, 255, 255, 0.1);
         box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
     }
-    #app .form-control {
-        background-color: rgba(255, 255, 255, 0.75);
-    }
+    /*#app input {*/
+    /*    background-color: rgba(255, 255, 255, 0.75) !important;*/
+    /*}*/
     .input-error {
         color: #ff6e6e;
+    }
+    .datepicker-box {
+        margin: auto;
     }
 
     /* BUTTONS */
@@ -111,6 +114,15 @@
         border-color: rgba(210, 57, 57, 0.7);
         background: rgba(210, 57, 57, 0.7);
     }
+    .btn-gray {
+        color: #fff;
+        border-color: rgba(146, 146, 146, 0.7);
+        background: rgba(146, 146, 146, 0.7);
+    }
+    .btn-gray:hover {
+        border-color: rgba(125, 125, 125, 0.7);
+        background: rgba(125, 125, 125, 0.7);
+    }
     .btn-shadow {
         color: #d4d4d4;
         background-color: #393b3d;
@@ -171,8 +183,12 @@
         border-radius: 10px !important;
     }
     .modal-header {
-        background: #353535;
-        border-bottom: 1px solid #1f1f1f !important;
+        background: #404040;
+        border-bottom: 1px solid #3e3e3e !important;
+        position: relative;
+        text-align: center;
+        align-items: center !important;
+        height: 70px;
     }
     .modal-header button.close {
         color: white;
@@ -180,11 +196,20 @@
     .modal-header button.close:hover {
         color: #cdcdcd;
     }
+    .modal-title {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 300px;
+        line-height: 1;
+    }
     .modal-body {
-        background: #4a4a4a;
+        background: #545454;
+        padding-top: 25px !important;
     }
     .modal-footer {
-        border-top: 1px solid #1f1f1f !important;
-        background: #353535;
+        border-top: 1px solid #3e3e3e !important;
+        background: #404040;
     }
 </style>

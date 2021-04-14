@@ -28,7 +28,7 @@
                                         <input type="password"
                                                v-model="password"
                                                id="form-auth-password"
-                                               class="form-control"
+                                               class="form-control bg-dark"
                                                name="password"
                                         >
                                         <span class="input-error">{{ errors[0] }}</span>
@@ -114,6 +114,9 @@
         margin: 150px auto 20px;
         max-width: 400px;
         /*font-family: Gordita,Helvetica Neue,Helvetica,Arial,sans-serif;*/
+    }
+    .form-auth-box input {
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0), inset 0 0 0 100px rgba(255, 255, 255,1);
     }
     .form-auth-logo {
         display: block;

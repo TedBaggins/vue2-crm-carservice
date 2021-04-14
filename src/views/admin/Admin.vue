@@ -58,11 +58,50 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        ...
+                        <div class="modal-add-admin-form-box">
+                            <form @submit.prevent="handleAddAdmin" id="form-add-admin">
+                                <div class="form-group row">
+                                    <label for="form-add-admin-fio" class="col-sm-4 col-form-label">ФИО</label>
+                                    <div class="col-sm-8">
+                                        <validation-provider rules="required" v-slot="{ errors }">
+                                            <input type="text"
+                                                   v-model="addAdminFio"
+                                                   id="form-add-admin-fio"
+                                                   class="form-control"
+                                                   name="fio"
+                                            >
+                                            <span class="input-error">{{ errors[0] }}</span>
+                                        </validation-provider>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="form-add-admin-birthday" class="col-sm-4 col-form-label">Дата рождения</label>
+                                    <div class="col-sm-8 datepicker-box">
+                                        <DatePicker id="form-add-admin-birthday" class="form-add-admin-datepicker" @setDate='setDate'/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="form-add-admin-phone" class="col-sm-4 col-form-label">Телефон</label>
+                                    <div class="col-sm-8">
+                                        <validation-provider rules="digits:3" v-slot="{ errors }">
+                                            <input type="text"
+                                                   v-model="addAdminPhone"
+                                                   id="form-add-admin-phone"
+                                                   class="form-control"
+                                                   name="phone"
+                                            >
+                                            <span class="input-error">{{ errors[0] }}</span>
+                                        </validation-provider>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <button type="submit" form="form-add-admin" class="btn-base-sm btn-orange">Отправить</button>
+                        <button type="button" class="btn-base-sm btn-gray" data-dismiss="modal">Закрыть</button>
                     </div>
                 </div>
             </div>
@@ -76,6 +115,18 @@
     import LeftMenu from '@/components/AdminLeftMenu';
     import {actionTypes as adminActionTypes} from "@/store/modules/admin";
     import {mapState} from 'vuex';
+    import DatePicker from "@/components/DatePicker";
+    import {ValidationProvider, extend} from "vee-validate";
+    import {required} from "vee-validate/dist/rules";
+
+    extend('required', {
+        ...required,
+        message: 'Обязательное поле'
+    });
+    // extend('decimal', {
+    //     ...decimal,
+    //     message: 'Допускаются только цифры'
+    // });
 
     export default {
         name: 'Admin',
@@ -84,11 +135,16 @@
                 loading: false,
                 errorAdd: false,
                 errorDelete: false,
+                addAdminFio: '',
+                addAdminBirthday: '',
+                addAdminPhone: ''
             }
         },
         components: {
             Header,
-            LeftMenu
+            LeftMenu,
+            DatePicker,
+            ValidationProvider
         },
         computed: {
             ...mapState({
@@ -109,7 +165,18 @@
             },
             handleEdit(id) {
                 console.log(id);
-            }
+            },
+            handleAddAdmin() {
+                let formData = {
+                    fio: this.addAdminFio,
+                    birthday: this.addAdminBirthday,
+                    phone: this.addAdminPhone
+                }
+                console.log(formData);
+            },
+            setDate (data) {
+                this.addAdminBirthday = data;
+            },
         },
         mounted() {
             this.$store.dispatch(adminActionTypes.getAdmins);
