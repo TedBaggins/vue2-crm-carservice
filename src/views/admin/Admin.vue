@@ -51,6 +51,7 @@
         <div class="modal fade" id="modal-add-admin" tabindex="-1" role="dialog" aria-labelledby="modal-add-admin-label" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
+                    <ValidationObserver v-slot="{ handleSubmit }" ref="formAddAdmin">
                     <div class="modal-header">
                         <h5 class="modal-title" id="modal-add-admin-label">Добавление администратора</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -59,7 +60,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="modal-add-admin-form-box">
-                            <form @submit.prevent="handleAddAdmin" id="form-add-admin">
+                            <form @submit.prevent="handleSubmit(handleAddAdmin)" id="form-add-admin">
                                 <div class="form-group row">
                                     <label for="form-add-admin-fio" class="col-sm-4 col-form-label">ФИО</label>
                                     <div class="col-sm-8">
@@ -78,14 +79,14 @@
                                 <div class="form-group row">
                                     <label for="form-add-admin-birthday" class="col-sm-4 col-form-label">Дата рождения</label>
                                     <div class="col-sm-8 datepicker-box">
-                                        <DatePicker id="form-add-admin-birthday" class="form-add-admin-datepicker" @setDate='setDate'/>
+                                        <DatePicker :key="datePickerKey" id="form-add-admin-birthday" class="form-add-admin-datepicker" @setTimestamp='setTimestamp'/>
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
                                     <label for="form-add-admin-phone" class="col-sm-4 col-form-label">Телефон</label>
                                     <div class="col-sm-8">
-                                        <validation-provider rules="digits:3" v-slot="{ errors }">
+                                        <validation-provider rules="numbers" v-slot="{ errors }">
                                             <input type="text"
                                                    v-model="addAdminPhone"
                                                    id="form-add-admin-phone"
@@ -103,6 +104,7 @@
                         <button type="submit" form="form-add-admin" class="btn-base-sm btn-orange">Отправить</button>
                         <button type="button" class="btn-base-sm btn-gray" data-dismiss="modal">Закрыть</button>
                     </div>
+                    </ValidationObserver>
                 </div>
             </div>
         </div>
@@ -123,10 +125,13 @@
         ...required,
         message: 'Обязательное поле'
     });
-    // extend('decimal', {
-    //     ...decimal,
-    //     message: 'Допускаются только цифры'
-    // });
+    extend('numbers', {
+        validate: value => {
+            let rule = /^\d+$/;
+            return rule.test(value);
+        },
+        message: "Поле может содержать только цифры"
+    });
 
     export default {
         name: 'Admin',
@@ -137,7 +142,8 @@
                 errorDelete: false,
                 addAdminFio: '',
                 addAdminBirthday: '',
-                addAdminPhone: ''
+                addAdminPhone: '',
+                datePickerKey: 0
             }
         },
         components: {
@@ -155,7 +161,6 @@
         },
         methods: {
             handleRemove(id) {
-                // console.log(id);
                 this.$store.dispatch(adminActionTypes.deleteAdmin, {
                     id: id
                 })
@@ -172,10 +177,16 @@
                     birthday: this.addAdminBirthday,
                     phone: this.addAdminPhone
                 }
-                console.log(formData);
+                this.$store.dispatch(adminActionTypes.addAdmin, formData)
+                .then(() => {
+                    this.addAdminFio = ''; this.addAdminBirthday = ''; this.addAdminPhone = '';
+                    this.datePickerKey += 1;
+                    this.$refs.formAddAdmin.reset();
+                    this.$store.dispatch(adminActionTypes.getAdmins);
+                })
             },
-            setDate (data) {
-                this.addAdminBirthday = data;
+            setTimestamp (data) {
+                this.addAdminBirthday = data.timestamp;
             },
         },
         mounted() {

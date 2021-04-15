@@ -8,7 +8,8 @@ const state = {
 
 export const actionTypes = {
     getAdmins: '[admin] getAdmins',
-    deleteAdmin: '[admin] deleteAdmin'
+    deleteAdmin: '[admin] deleteAdmin',
+    addAdmin: '[admin] addAdmin'
 }
 
 const actions = {
@@ -39,6 +40,20 @@ const actions = {
                     ctx.commit(mutationTypes.deleteAdminFailure);
                 });
         });
+    },
+    [actionTypes.addAdmin](ctx, formData) {
+        return new Promise(resolve => {
+            ctx.commit(mutationTypes.addAdminStart);
+            adminApi
+                .createAdmin(formData)
+                .then(data => {
+                    ctx.commit(mutationTypes.addAdminSuccess);
+                    resolve(data);
+                })
+                .catch(() => {
+                    ctx.commit(mutationTypes.addAdminFailure);
+                });
+        });
     }
 }
 
@@ -50,6 +65,10 @@ export const mutationTypes = {
     deleteAdminStart: '[admin] deleteAdminStart',
     deleteAdminSuccess: '[admin] deleteAdminSuccess',
     deleteAdminFailure: '[admin] deleteAdminFailure',
+
+    addAdminStart: '[admin] addAdminStart',
+    addAdminSuccess: '[admin] addAdminSuccess',
+    addAdminFailure: '[admin] addAdminFailure',
 }
 
 const mutations = {
@@ -68,6 +87,10 @@ const mutations = {
     [mutationTypes.deleteAdminStart]() {},
     [mutationTypes.deleteAdminSuccess]() {},
     [mutationTypes.deleteAdminFailure]() {},
+
+    [mutationTypes.addAdminStart]() {},
+    [mutationTypes.addAdminSuccess]() {},
+    [mutationTypes.addAdminFailure]() {},
 }
 
 export default {

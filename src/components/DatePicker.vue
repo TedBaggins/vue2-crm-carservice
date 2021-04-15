@@ -1,6 +1,6 @@
 <template>
     <div>
-        <date-picker v-model="year" v-on:change="setYear" type="year" placeholder="Год"></date-picker>
+        <date-picker v-model="timestamp" v-on:change="setTimestamp" value-type="timestamp" type="date" placeholder="Дата"></date-picker>
     </div>
 </template>
 
@@ -11,13 +11,13 @@
         components: { DatePicker },
         data() {
             return {
-                year: '',
+                timestamp: null,
             };
         },
         methods: {
-            setYear () {
-                this.$emit('setYear', {
-                    year: new Date(this.year).getFullYear(),
+            setTimestamp () {
+                this.$emit('setTimestamp', {
+                    timestamp: this.timestamp,
                 })
             }
         }
