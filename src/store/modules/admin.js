@@ -93,8 +93,17 @@ const mutations = {
     [mutationTypes.addAdminFailure]() {},
 }
 
+const getters = {
+    getAdminById: state => id => {
+        return state.data.filter(admin => {
+            return admin.id == id;
+        })
+    }
+}
+
 export default {
     state,
     actions,
-    mutations
+    mutations,
+    getters
 }

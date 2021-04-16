@@ -11,7 +11,7 @@
         components: { DatePicker },
         data() {
             return {
-                timestamp: null,
+                // timestamp: 485553600000,
             };
         },
         methods: {
@@ -20,6 +20,14 @@
                     timestamp: this.timestamp,
                 })
             }
+        },
+        computed: {
+            timestamp: () => {
+                return null;
+            }
+        },
+        created() {
+
         }
     };
 </script>
