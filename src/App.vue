@@ -162,6 +162,7 @@
     /* TABLES */
     .content-box {
         margin-top: 50px;
+        margin-bottom: 50px;
     }
     .table-panel-box {
         margin-bottom: 30px;

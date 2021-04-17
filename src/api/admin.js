@@ -9,6 +9,9 @@ const createAdmin = formData => {
 }
 
 const updateAdmin = (id, formData) => {
+    // console.log("id ", id);
+    // console.log("formData ", formData);
+    // return new Promise(resolve => {resolve("success")});
     return axios.put(`/admins/${id}`, formData).then(response => response.data);
 }
 

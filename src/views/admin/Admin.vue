@@ -79,7 +79,7 @@
                                 <div class="form-group row">
                                     <label for="form-add-admin-birthday" class="col-sm-4 col-form-label">Дата рождения</label>
                                     <div class="col-sm-8 datepicker-box">
-                                        <DatePicker :key="addAdminDatePickerKey" id="form-add-admin-birthday" class="form-add-admin-datepicker" @setTimestamp='setTimestamp'/>
+                                        <DatePicker v-bind:initialDate="initialDate" :key="addAdminDatePickerKey" id="form-add-admin-birthday" class="form-add-admin-datepicker" @setTimestamp='setTimestamp'/>
                                     </div>
                                 </div>
 
@@ -140,7 +140,7 @@
                                     <div class="form-group row">
                                         <label for="form-edit-admin-birthday" class="col-sm-4 col-form-label">Дата рождения</label>
                                         <div class="col-sm-8 datepicker-box">
-                                            <DatePicker :key="editAdminDatePickerKey" id="form-edit-admin-birthday" class="form-edit-admin-datepicker" @setTimestamp='setTimestamp'/>
+                                            <DatePicker v-bind:initialDate="initialDate" :key="editAdminDatePickerKey" id="form-edit-admin-birthday" class="form-edit-admin-datepicker" @setTimestamp='setTimestamp'/>
                                         </div>
                                     </div>
 
@@ -209,6 +209,8 @@
                 editAdminBirthday: '',
                 editAdminPhone: '',
                 editAdminDatePickerKey: 0,
+                initialDate: null,
+                selectedAdmin: null
             }
         },
         components: {
@@ -235,9 +237,12 @@
                 })
             },
             handleEdit(id) {
-                let selectedAdmin = this.getAdminById(id)[0];
-                this.editAdminFio = selectedAdmin.fio;
-                this.editAdminPhone = selectedAdmin.phone;
+                this.selectedAdmin = this.getAdminById(id)[0];
+                this.editAdminFio = this.selectedAdmin.fio;
+                this.editAdminBirthday = this.selectedAdmin.birthday;
+                this.editAdminPhone = this.selectedAdmin.phone;
+                this.initialDate = Number(this.editAdminBirthday);
+                this.editAdminDatePickerKey += 1;
                 $('#modal-edit-admin').modal();
             },
             handleAddAdmin() {
@@ -246,12 +251,35 @@
                     birthday: this.addAdminBirthday,
                     phone: this.addAdminPhone
                 }
-                this.$store.dispatch(adminActionTypes.addAdmin, formData)
+                this.$store.dispatch(adminActionTypes.addAdmin, {
+                    formData
+                })
                 .then(() => {
                     this.addAdminFio = ''; this.addAdminBirthday = ''; this.addAdminPhone = '';
                     this.addAdminDatePickerKey += 1;
                     this.$refs.formAddAdmin.reset();
                     this.$store.dispatch(adminActionTypes.getAdmins);
+                    $('#modal-add-admin').modal('hide');
+                })
+            },
+            handleEditAdmin() {
+                let id = this.selectedAdmin.id;
+                let formData = {
+                    fio: this.editAdminFio,
+                    birthday: this.editAdminBirthday,
+                    phone: this.editAdminPhone
+                }
+                this.$store.dispatch(adminActionTypes.editAdmin, {
+                    id,
+                    formData
+                })
+                .then(() => {
+                    this.editAdminFio = ''; this.editAdminBirthday = ''; this.editAdminPhone = '';
+                    this.initialDate = null;
+                    this.editAdminDatePickerKey += 1;
+                    this.$refs.formEditAdmin.reset();
+                    this.$store.dispatch(adminActionTypes.getAdmins);
+                    $('#modal-edit-admin').modal('hide');
                 })
             },
             setTimestamp (data) {

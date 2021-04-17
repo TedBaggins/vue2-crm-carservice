@@ -28,7 +28,7 @@
                                         <input type="password"
                                                v-model="password"
                                                id="form-auth-password"
-                                               class="form-control bg-dark"
+                                               class="form-control"
                                                name="password"
                                         >
                                         <span class="input-error">{{ errors[0] }}</span>

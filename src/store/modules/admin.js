@@ -9,7 +9,8 @@ const state = {
 export const actionTypes = {
     getAdmins: '[admin] getAdmins',
     deleteAdmin: '[admin] deleteAdmin',
-    addAdmin: '[admin] addAdmin'
+    addAdmin: '[admin] addAdmin',
+    editAdmin: '[admin] editAdmin'
 }
 
 const actions = {
@@ -20,6 +21,7 @@ const actions = {
                 .getAdmins()
                 .then(admins => {
                     ctx.commit(mutationTypes.getAdminsSuccess, admins);
+                    admins.sort((a, b) => a.fio > b.fio ? 1 : -1); // sort by fio
                     resolve(admins);
                 })
                 .catch(() => {
@@ -41,7 +43,7 @@ const actions = {
                 });
         });
     },
-    [actionTypes.addAdmin](ctx, formData) {
+    [actionTypes.addAdmin](ctx, {formData}) {
         return new Promise(resolve => {
             ctx.commit(mutationTypes.addAdminStart);
             adminApi
@@ -52,6 +54,20 @@ const actions = {
                 })
                 .catch(() => {
                     ctx.commit(mutationTypes.addAdminFailure);
+                });
+        });
+    },
+    [actionTypes.editAdmin](ctx, {id, formData}) {
+        return new Promise(resolve => {
+            ctx.commit(mutationTypes.editAdminStart);
+            adminApi
+                .updateAdmin(id, formData)
+                .then(() => {
+                    ctx.commit(mutationTypes.editAdminSuccess);
+                    resolve();
+                })
+                .catch(() => {
+                    ctx.commit(mutationTypes.editAdminFailure);
                 });
         });
     }
@@ -69,6 +85,10 @@ export const mutationTypes = {
     addAdminStart: '[admin] addAdminStart',
     addAdminSuccess: '[admin] addAdminSuccess',
     addAdminFailure: '[admin] addAdminFailure',
+
+    editAdminStart: '[admin] editAdminStart',
+    editAdminSuccess: '[admin] editAdminSuccess',
+    editAdminFailure: '[admin] editAdminFailure',
 }
 
 const mutations = {
@@ -91,6 +111,10 @@ const mutations = {
     [mutationTypes.addAdminStart]() {},
     [mutationTypes.addAdminSuccess]() {},
     [mutationTypes.addAdminFailure]() {},
+
+    [mutationTypes.editAdminStart]() {},
+    [mutationTypes.editAdminSuccess]() {},
+    [mutationTypes.editAdminFailure]() {},
 }
 
 const getters = {

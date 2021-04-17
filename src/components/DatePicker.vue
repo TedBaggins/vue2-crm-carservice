@@ -7,11 +7,13 @@
 <script>
     import DatePicker from 'vue2-datepicker';
     import 'vue2-datepicker/index.css';
+
     export default {
+        props: ['initialDate'],
         components: { DatePicker },
         data() {
             return {
-                // timestamp: 485553600000,
+                timestamp: this.initialDate
             };
         },
         methods: {
@@ -20,14 +22,6 @@
                     timestamp: this.timestamp,
                 })
             }
-        },
-        computed: {
-            timestamp: () => {
-                return null;
-            }
-        },
-        created() {
-
         }
     };
 </script>
