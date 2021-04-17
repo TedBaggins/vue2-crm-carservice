@@ -41,9 +41,6 @@
         background: rgba(255, 255, 255, 0.1);
         box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
     }
-    /*#app input {*/
-    /*    background-color: rgba(255, 255, 255, 0.75) !important;*/
-    /*}*/
     .input-error {
         color: #ff6e6e;
     }
@@ -164,6 +161,9 @@
         margin-top: 50px;
         margin-bottom: 50px;
     }
+    .table-dark {
+        background-color: #393b3d !important;
+    }
     .table-panel-box {
         margin-bottom: 30px;
     }
@@ -212,5 +212,45 @@
     .modal-footer {
         border-top: 1px solid #3e3e3e !important;
         background: #404040;
+    }
+
+    /* PAGINATION */
+    .table-paginator-box {
+        display: flex;
+        justify-content: center;
+    }
+    .paginator-ul {
+        margin: 10px;
+        padding-left: 0;
+        display: flex;
+        align-items: center;
+        list-style: none;
+        background: #393b3d;
+        border-radius: 4px;
+    }
+    .paginator-ul li {
+        /*padding: 10px 15px;*/
+        color: #d4d4d4;
+    }
+    .paginator-ul li:hover {
+        background: #2c2d2f;
+    }
+    .paginator-ul li.disabled {
+        color: #999999;
+    }
+    .paginator-ul li.disabled:hover {
+        background: #393b3d;
+    }
+    .paginator-ul li.active {
+        background: #749799;
+    }
+    .paginator-ul li.active a {
+        color: #fff;
+    }
+    .paginator-ul li a {
+        display: inline-block;
+        padding: 10px 15px;
+        color: #d4d4d4;
+        text-decoration: none;
     }
 </style>

@@ -42,12 +42,24 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                <div v-if="pagesCount" class="table-paginator-box">
+                                    <paginate
+                                        v-model="initialPage"
+                                        :page-count="pagesCount"
+                                        :click-handler="handlePage"
+                                        :prev-text="'Пред.'"
+                                        :next-text="'След.'"
+                                        :container-class="'paginator-ul'"
+                                        :page-class="'page-item'">
+                                    </paginate>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="modal fade" id="modal-add-admin" tabindex="-1" role="dialog" aria-labelledby="modal-add-admin-label" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -210,30 +222,39 @@
                 editAdminPhone: '',
                 editAdminDatePickerKey: 0,
                 initialDate: null,
-                selectedAdmin: null
+                selectedAdmin: null,
+                initialPage: null
             }
         },
         components: {
             Header,
             LeftMenu,
             DatePicker,
-            ValidationProvider
+            ValidationProvider,
         },
         computed: {
             ...mapState({
                 isLoading: state => state.admin.isLoading,
                 error: state => state.admin.error,
-                admins: state => state.admin.data
+                admins: state => state.admin.data,
+                limit: state => state.admin.limit,
+                pagesCount: state => Math.ceil(state.admin.adminsCount / state.admin.limit)
             }),
-            ...mapGetters(["getAdminById"])
+            ...mapGetters(["getAdminById"]),
+            offset: function() {
+                return (this.initialPage - 1) * this.limit;
+            }
         },
         methods: {
+            fillAdmins() {
+                this.$store.dispatch(adminActionTypes.getAdmins, {offset: this.offset});
+            },
             handleRemove(id) {
                 this.$store.dispatch(adminActionTypes.deleteAdmin, {
                     id: id
                 })
                 .then(() => {
-                    this.$store.dispatch(adminActionTypes.getAdmins);
+                    this.fillAdmins();
                 })
             },
             handleEdit(id) {
@@ -258,7 +279,7 @@
                     this.addAdminFio = ''; this.addAdminBirthday = ''; this.addAdminPhone = '';
                     this.addAdminDatePickerKey += 1;
                     this.$refs.formAddAdmin.reset();
-                    this.$store.dispatch(adminActionTypes.getAdmins);
+                    this.fillAdmins();
                     $('#modal-add-admin').modal('hide');
                 })
             },
@@ -278,16 +299,27 @@
                     this.initialDate = null;
                     this.editAdminDatePickerKey += 1;
                     this.$refs.formEditAdmin.reset();
-                    this.$store.dispatch(adminActionTypes.getAdmins);
+                    this.fillAdmins();
                     $('#modal-edit-admin').modal('hide');
                 })
             },
             setTimestamp (data) {
                 this.addAdminBirthday = data.timestamp;
             },
+            handlePage(pageNum) {
+                this.$router.push({ name: 'AdminAdmins', query: { page: pageNum }});
+                this.initialPage = pageNum;
+                this.fillAdmins();
+            }
         },
         mounted() {
-            this.$store.dispatch(adminActionTypes.getAdmins);
+            if(this.$route.query.page) {
+                this.initialPage = Number(this.$route.query.page);
+            } else {
+                this.initialPage = 1;
+            }
+            this.fillAdmins();
+            this.$store.dispatch(adminActionTypes.getAdminsCount);
         }
     }
 </script>

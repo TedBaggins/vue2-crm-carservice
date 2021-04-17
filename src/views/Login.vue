@@ -93,7 +93,6 @@
                         login: this.login,
                         password: this.password
                     }
-                    //console.log(formData);
                     this.$store
                         .dispatch(actionTypes.login, formData)
                         .then(() => {

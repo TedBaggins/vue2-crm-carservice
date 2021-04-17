@@ -3,22 +3,25 @@ import adminApi from '@/api/admin';
 const state = {
     data: null,
     isLoading: false,
-    error: null
+    error: null,
+    adminsCount: null,
+    limit: 10
 }
 
 export const actionTypes = {
     getAdmins: '[admin] getAdmins',
+    getAdminsCount: '[admin] getAdminsCount',
     deleteAdmin: '[admin] deleteAdmin',
     addAdmin: '[admin] addAdmin',
     editAdmin: '[admin] editAdmin'
 }
 
 const actions = {
-    [actionTypes.getAdmins](ctx) {
+    [actionTypes.getAdmins](ctx, {offset}) {
         return new Promise(resolve => {
             ctx.commit(mutationTypes.getAdminsStart);
             adminApi
-                .getAdmins()
+                .getAdmins(state.limit, offset)
                 .then(admins => {
                     ctx.commit(mutationTypes.getAdminsSuccess, admins);
                     admins.sort((a, b) => a.fio > b.fio ? 1 : -1); // sort by fio
@@ -26,6 +29,20 @@ const actions = {
                 })
                 .catch(() => {
                     ctx.commit(mutationTypes.getAdminsFailure);
+                });
+        });
+    },
+    [actionTypes.getAdminsCount](ctx) {
+        return new Promise(resolve => {
+            ctx.commit(mutationTypes.getAdminsCountStart);
+            adminApi
+                .getAdminsCount()
+                .then(data => {
+                    ctx.commit(mutationTypes.getAdminsCountSuccess, data.count);
+                    resolve(data.count);
+                })
+                .catch(() => {
+                    ctx.commit(mutationTypes.getAdminsCountFailure);
                 });
         });
     },
@@ -78,6 +95,10 @@ export const mutationTypes = {
     getAdminsSuccess: '[admin] getAdminsSuccess',
     getAdminsFailure: '[admin] getAdminsFailure',
 
+    getAdminsCountStart: '[admin] getAdminsCountStart',
+    getAdminsCountSuccess: '[admin] getAdminsCountSuccess',
+    getAdminsCountFailure: '[admin] getAdminsCountFailure',
+
     deleteAdminStart: '[admin] deleteAdminStart',
     deleteAdminSuccess: '[admin] deleteAdminSuccess',
     deleteAdminFailure: '[admin] deleteAdminFailure',
@@ -104,6 +125,18 @@ const mutations = {
         state.isLoading = false;
     },
 
+    [mutationTypes.getAdminsCountStart](state) {
+        state.isLoading = true;
+        state.adminsCount = null;
+    },
+    [mutationTypes.getAdminsCountSuccess](state, payload) {
+        state.isLoading = false;
+        state.adminsCount = payload;
+    },
+    [mutationTypes.getAdminsCountFailure](state) {
+        state.isLoading = false;
+    },
+
     [mutationTypes.deleteAdminStart]() {},
     [mutationTypes.deleteAdminSuccess]() {},
     [mutationTypes.deleteAdminFailure]() {},
@@ -122,6 +155,9 @@ const getters = {
         return state.data.filter(admin => {
             return admin.id == id;
         })
+    },
+    getAdminsCount: state => () => {
+        return state.adminsCount;
     }
 }
 

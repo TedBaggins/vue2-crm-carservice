@@ -1,7 +1,11 @@
 import axios from '@/api/axios';
 
-const getAdmins = () => {
-    return axios.get(`/admins`).then(response => response.data);
+const getAdmins = (limit, offset) => {
+    return axios.get(`/admins?limit=${limit}&offset=${offset}`).then(response => response.data);
+}
+
+const getAdminsCount = () => {
+    return axios.get(`/admins/count`).then(response => response.data);
 }
 
 const createAdmin = formData => {
@@ -9,9 +13,6 @@ const createAdmin = formData => {
 }
 
 const updateAdmin = (id, formData) => {
-    // console.log("id ", id);
-    // console.log("formData ", formData);
-    // return new Promise(resolve => {resolve("success")});
     return axios.put(`/admins/${id}`, formData).then(response => response.data);
 }
 
@@ -21,6 +22,7 @@ const deleteAdmin = id => {
 
 export default {
     getAdmins,
+    getAdminsCount,
     createAdmin,
     updateAdmin,
     deleteAdmin
