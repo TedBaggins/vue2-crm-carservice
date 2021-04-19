@@ -202,7 +202,7 @@
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        width: 300px;
+        width: 400px;
         line-height: 1;
     }
     .modal-body {

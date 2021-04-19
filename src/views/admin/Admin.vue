@@ -8,7 +8,7 @@
                         <LeftMenu/>
                     </div>
                     <div class="col-md-9">
-                        <div class="loading-box" v-if="loading">Loading...</div>
+                        <Loader v-if="loading"/>
                         <div v-else>
                             <div v-if="admins" class="content-box box-transparent">
                                 <div class="table-panel-box">
@@ -126,7 +126,7 @@
                 <div class="modal-content">
                     <ValidationObserver v-slot="{ handleSubmit }" ref="formEditAdmin">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modal-edit-admin-label">Добавление администратора</h5>
+                            <h5 class="modal-title" id="modal-edit-admin-label">Редактирование администратора</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -187,6 +187,7 @@
 <script>
     import Header from '@/components/Header';
     import LeftMenu from '@/components/AdminLeftMenu';
+    import Loader from '@/components/Loader';
     import {actionTypes as adminActionTypes} from "@/store/modules/admin";
     import {mapState, mapGetters} from 'vuex';
     import DatePicker from "@/components/DatePicker";
@@ -207,7 +208,14 @@
     });
 
     export default {
-        name: 'Admin',
+        name: 'admins',
+        components: {
+            Header,
+            LeftMenu,
+            Loader,
+            DatePicker,
+            ValidationProvider,
+        },
         data() {
             return {
                 loading: false,
@@ -225,12 +233,6 @@
                 selectedAdmin: null,
                 initialPage: null
             }
-        },
-        components: {
-            Header,
-            LeftMenu,
-            DatePicker,
-            ValidationProvider,
         },
         computed: {
             ...mapState({
