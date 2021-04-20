@@ -57,7 +57,7 @@ const routes = [
         name: 'Master',
         // lazy-loaded
         component: () => import('@/views/master/Master.vue')
-    },
+    }
 ]
 
 const router = new VueRouter({
