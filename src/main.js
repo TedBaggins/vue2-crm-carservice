@@ -6,7 +6,7 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ValidationObserver, ValidationProvider, extend} from 'vee-validate';
 import * as rules from 'vee-validate/dist/rules';
-import Paginate from 'vuejs-paginate'
+import Paginate from 'vuejs-paginate';
 
 // install rules
 Object.keys(rules).forEach(rule => {

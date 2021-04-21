@@ -29,6 +29,9 @@
         font-family: 'Vollkorn', serif !important;
         /*font-family: Gordita,Helvetica Neue,Helvetica,Arial,sans-serif !important;*/
     }
+    hr {
+        border-top: 1px solid rgba(255,255,255,0.1) !important;
+    }
     #app {
         font-family: Avenir, Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
@@ -166,6 +169,7 @@
     }
     .table-panel-box {
         margin-bottom: 30px;
+        padding-top: 5px;
     }
     .table-box {
         text-align: center;

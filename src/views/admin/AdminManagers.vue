@@ -8,7 +8,7 @@
                         <LeftMenu/>
                     </div>
                     <div class="col-md-9">
-                        <Loader v-if="loading"/>
+                        <Loader v-if="isLoading"/>
                         <div v-else>
                             <div v-if="managers" class="content-box box-transparent">
                                 <div class="table-panel-box">

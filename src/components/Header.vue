@@ -7,9 +7,12 @@
                 </div>
                 <div class="col-md-3">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4 header-profile-name-box">
+                    <p v-if="profileName" class="header-profile-name">
+                        {{profileName}}
+                    </p>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <button class="btn-base-sm btn-shadow float-right" @click="handleLogout">
                         <i class="bi bi-box-arrow-right"></i>
                         <span>Выйти</span>
@@ -22,8 +25,19 @@
 
 <script>
     import { actionTypes } from "@/store/modules/auth";
+    import {mapState} from "vuex";
 
     export default {
+        data() {
+            return {
+
+            };
+        },
+        computed: {
+            ...mapState({
+                profileName: state => state.auth.user.profile.fio
+            }),
+        },
         methods: {
             handleLogout() {
                 this.$store
@@ -48,5 +62,14 @@
     }
     .header-box button i {
         padding-right: 5px;
+    }
+    .header-profile-name-box {
+        display: flex;
+        justify-content: flex-end;
+    }
+    .header-profile-name {
+        margin: 0;
+        display: flex;
+        align-items: center;
     }
 </style>
