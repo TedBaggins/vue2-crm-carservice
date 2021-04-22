@@ -34,7 +34,7 @@
                                                 <button class="btn-base-sm btn-blue" @click="handleEdit(admin.id)">
                                                     <i class="bi bi-pen"></i>
                                                 </button>
-                                                <button class="btn-base-sm btn-red" @click="handleRemove(admin.id)">
+                                                <button class="btn-base-sm btn-red" data-toggle="modal" data-target="#modal-delete-admin" @click="handleRemove(admin.id)">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             </td>
@@ -181,6 +181,28 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="modal-delete-admin" tabindex="-1" role="dialog" aria-labelledby="modal-delete-admin-label" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modal-delete-admin-label">Удаление администратора</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="modal-delete-body">
+                            Подтвердите удаление
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn-base-sm btn-orange" @click="confirmRemove">Ок</button>
+                        <button type="button" class="btn-base-sm btn-gray" data-dismiss="modal">Отмена</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -231,7 +253,8 @@
                 editAdminDatePickerKey: 0,
                 initialDate: null,
                 selectedAdmin: null,
-                initialPage: null
+                initialPage: null,
+                removingId: null
             }
         },
         computed: {
@@ -252,11 +275,15 @@
                 this.$store.dispatch(adminActionTypes.getAdmins, {offset: this.offset});
             },
             handleRemove(id) {
+                this.removingId = id;
+            },
+            confirmRemove() {
                 this.$store.dispatch(adminActionTypes.deleteAdmin, {
-                    id: id
+                    id: this.removingId
                 })
                 .then(() => {
                     this.fillAdmins();
+                    $('#modal-delete-admin').modal('hide');
                 })
             },
             handleEdit(id) {

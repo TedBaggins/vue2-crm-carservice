@@ -8,7 +8,12 @@ const getUsersCount = () => {
     return axios.get(`/users/count`).then(response => response.data);
 }
 
+const deleteUser = id => {
+    return axios.delete(`/users/${id}`);
+}
+
 export default {
     getUsers,
     getUsersCount,
+    deleteUser
 }

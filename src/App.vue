@@ -216,6 +216,10 @@
         background: #545454;
         padding-top: 25px !important;
     }
+    .modal-delete-body {
+        text-align: center;
+        font-size: 18px;
+    }
     .modal-footer {
         border-top: 1px solid #3e3e3e !important;
         background: #404040;

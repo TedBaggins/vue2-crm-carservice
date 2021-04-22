@@ -34,7 +34,7 @@
                                                 <button class="btn-base-sm btn-blue" @click="handleEdit(manager.id)">
                                                     <i class="bi bi-pen"></i>
                                                 </button>
-                                                <button class="btn-base-sm btn-red" @click="handleRemove(manager.id)">
+                                                <button class="btn-base-sm btn-red" data-toggle="modal" data-target="#modal-delete-manager" @click="handleRemove(manager.id)">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             </td>
@@ -181,6 +181,28 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="modal-delete-manager" tabindex="-1" role="dialog" aria-labelledby="modal-delete-manager-label" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modal-delete-manager-label">Удаление менеджера</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="modal-delete-body">
+                            Подтвердите удаление
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn-base-sm btn-orange" @click="confirmRemove">Ок</button>
+                        <button type="button" class="btn-base-sm btn-gray" data-dismiss="modal">Отмена</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -231,7 +253,8 @@
                 editManagerDatePickerKey: 0,
                 initialDate: null,
                 selectedManager: null,
-                initialPage: null
+                initialPage: null,
+                removingId: null
             }
         },
         computed: {
@@ -252,12 +275,16 @@
                 this.$store.dispatch(managerActionTypes.getManagers, {offset: this.offset});
             },
             handleRemove(id) {
+                this.removingId = id;
+            },
+            confirmRemove() {
                 this.$store.dispatch(managerActionTypes.deleteManager, {
-                    id: id
+                    id: this.removingId
                 })
-                    .then(() => {
-                        this.fillManagers();
-                    })
+                .then(() => {
+                    this.fillManagers();
+                    $('#modal-delete-manager').modal('hide');
+                })
             },
             handleEdit(id) {
                 this.selectedManager = this.getManagerById(id)[0];

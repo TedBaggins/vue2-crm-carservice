@@ -11,6 +11,7 @@ const state = {
 export const actionTypes = {
     getUsers: '[user] getUsers',
     getUsersCount: '[user] getUsersCount',
+    deleteUser: '[user] deleteUser',
 }
 
 const actions = {
@@ -41,7 +42,21 @@ const actions = {
                     ctx.commit(mutationTypes.getUsersCountFailure);
                 });
         });
-    }
+    },
+    [actionTypes.deleteUser](ctx, {id}) {
+        return new Promise(resolve => {
+            ctx.commit(mutationTypes.deleteUserStart);
+            userApi
+                .deleteUser(id)
+                .then(() => {
+                    ctx.commit(mutationTypes.deleteUserSuccess);
+                    resolve();
+                })
+                .catch(() => {
+                    ctx.commit(mutationTypes.deleteUserFailure);
+                });
+        });
+    },
 }
 
 export const mutationTypes = {
@@ -52,6 +67,10 @@ export const mutationTypes = {
     getUsersCountStart: '[user] getUsersCountStart',
     getUsersCountSuccess: '[user] getUsersCountSuccess',
     getUsersCountFailure: '[user] getUsersCountFailure',
+
+    deleteUserStart: '[user] deleteUserStart',
+    deleteUserSuccess: '[user] deleteUserSuccess',
+    deleteUserFailure: '[user] deleteUserFailure',
 }
 
 const mutations = {
@@ -78,6 +97,10 @@ const mutations = {
     [mutationTypes.getUsersCountFailure](state) {
         state.isLoading = false;
     },
+
+    [mutationTypes.deleteUserStart]() {},
+    [mutationTypes.deleteUserSuccess]() {},
+    [mutationTypes.deleteUserFailure]() {},
 }
 
 const getters = {
