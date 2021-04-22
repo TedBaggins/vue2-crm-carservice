@@ -264,4 +264,14 @@
         color: #d4d4d4;
         text-decoration: none;
     }
+
+    /* ERROR MESSAGES */
+    .alert-danger {
+        color: #ffffff !important;
+        background-color: #b54040 !important;
+        border-color: #b54040 !important;
+    }
+    button.close:hover {
+        color: #fff !important;
+    }
 </style>

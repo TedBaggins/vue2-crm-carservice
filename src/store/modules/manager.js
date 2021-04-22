@@ -47,7 +47,7 @@ const actions = {
         });
     },
     [actionTypes.deleteManager](ctx, {id}) {
-        return new Promise(resolve => {
+        return new Promise((resolve, reject) => {
             ctx.commit(mutationTypes.deleteManagerStart);
             managerApi
                 .deleteManager(id)
@@ -55,8 +55,9 @@ const actions = {
                     ctx.commit(mutationTypes.deleteManagerSuccess);
                     resolve();
                 })
-                .catch(() => {
+                .catch((error) => {
                     ctx.commit(mutationTypes.deleteManagerFailure);
+                    reject(error.response.data);
                 });
         });
     },

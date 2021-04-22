@@ -18,6 +18,10 @@ axios.interceptors.response.use((response) => {
             this.$router.push({name: 'Login'});
             reject(error);
         });
+    } else if (error.response.status === 500) {
+        return new Promise((resolve, reject) => {
+            reject(error);
+        });
     }
 });
 
