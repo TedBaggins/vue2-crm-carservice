@@ -35,7 +35,12 @@
         },
         computed: {
             ...mapState({
-                profileName: state => state.auth.user.profile.fio
+                profileName: state => {
+                    if (state.auth.user) {
+                        return state.auth.user.profile.fio;
+                    }
+                    return '';
+                }
             }),
         },
         methods: {
