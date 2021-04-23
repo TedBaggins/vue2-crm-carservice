@@ -55,7 +55,6 @@
     import { ValidationProvider, extend } from 'vee-validate';
     import { required } from 'vee-validate/dist/rules';
     import { actionTypes } from "@/store/modules/auth";
-    // import logo from "@/assets/logo-carservice.png";
 
     extend('required', {
         ...required,
