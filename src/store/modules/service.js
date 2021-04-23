@@ -47,7 +47,7 @@ const actions = {
         });
     },
     [actionTypes.deleteService](ctx, {id}) {
-        return new Promise(resolve => {
+        return new Promise((resolve, reject) => {
             ctx.commit(mutationTypes.deleteServiceStart);
             serviceApi
                 .deleteService(id)
@@ -55,8 +55,9 @@ const actions = {
                     ctx.commit(mutationTypes.deleteServiceSuccess);
                     resolve();
                 })
-                .catch(() => {
+                .catch((error) => {
                     ctx.commit(mutationTypes.deleteServiceFailure);
+                    reject(error.response.data);
                 });
         });
     },

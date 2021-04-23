@@ -15,6 +15,14 @@
                                     <span>Администраторы</span>
                                     <button class="btn-base-sm btn-blue float-right" data-toggle="modal" data-target="#modal-add-admin">Добавить</button>
                                 </div>
+
+                                <div v-if="errorDelete" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong>Ошибка!</strong> Нельзя удалить администратора, связанного с учетной записью
+                                    <button type="button" @click="closeWarningDelete" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
                                 <div class="table-box">
                                     <table class="table table-dark table-striped table-hover">
                                         <thead>
@@ -285,6 +293,13 @@
                     this.fillAdmins();
                     $('#modal-delete-admin').modal('hide');
                 })
+                .catch(() => {
+                    this.errorDelete = true;
+                    $('#modal-delete-admin').modal('hide');
+                })
+            },
+            closeWarningDelete: function () {
+                this.errorDelete = false;
             },
             handleEdit(id) {
                 this.selectedAdmin = this.getAdminById(id)[0];

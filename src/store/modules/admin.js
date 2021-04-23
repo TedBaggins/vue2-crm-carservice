@@ -47,7 +47,7 @@ const actions = {
         });
     },
     [actionTypes.deleteAdmin](ctx, {id}) {
-        return new Promise(resolve => {
+        return new Promise((resolve, reject) => {
             ctx.commit(mutationTypes.deleteAdminStart);
             adminApi
                 .deleteAdmin(id)
@@ -55,8 +55,9 @@ const actions = {
                     ctx.commit(mutationTypes.deleteAdminSuccess);
                     resolve();
                 })
-                .catch(() => {
+                .catch((error) => {
                     ctx.commit(mutationTypes.deleteAdminFailure);
+                    reject(error.response.data);
                 });
         });
     },

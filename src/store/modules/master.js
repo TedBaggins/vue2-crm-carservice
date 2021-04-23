@@ -47,7 +47,7 @@ const actions = {
         });
     },
     [actionTypes.deleteMaster](ctx, {id}) {
-        return new Promise(resolve => {
+        return new Promise((resolve, reject) => {
             ctx.commit(mutationTypes.deleteMasterStart);
             masterApi
                 .deleteMaster(id)
@@ -55,8 +55,9 @@ const actions = {
                     ctx.commit(mutationTypes.deleteMasterSuccess);
                     resolve();
                 })
-                .catch(() => {
+                .catch((error) => {
                     ctx.commit(mutationTypes.deleteMasterFailure);
+                    reject(error.response.data);
                 });
         });
     },

@@ -44,7 +44,7 @@ const actions = {
         });
     },
     [actionTypes.deleteUser](ctx, {id}) {
-        return new Promise(resolve => {
+        return new Promise((resolve, reject) => {
             ctx.commit(mutationTypes.deleteUserStart);
             userApi
                 .deleteUser(id)
@@ -52,8 +52,9 @@ const actions = {
                     ctx.commit(mutationTypes.deleteUserSuccess);
                     resolve();
                 })
-                .catch(() => {
+                .catch((error) => {
                     ctx.commit(mutationTypes.deleteUserFailure);
+                    reject(error.response.data);
                 });
         });
     },

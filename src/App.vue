@@ -270,6 +270,17 @@
         color: #ffffff !important;
         background-color: #b54040 !important;
         border-color: #b54040 !important;
+        position: relative;
+        min-height: 50px;
+    }
+    .alert-danger .alert-danger-message {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        display: inline-block;
+        width: 100%;
+        text-align: center;
     }
     button.close:hover {
         color: #fff !important;

@@ -15,6 +15,14 @@
                                     <span>Услуги</span>
                                     <button class="btn-base-sm btn-blue float-right" data-toggle="modal" data-target="#modal-add-service">Добавить</button>
                                 </div>
+
+                                <div v-if="errorDelete" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong>Ошибка!</strong> При удалении возникли неполадки...
+                                    <button type="button" @click="closeWarningDelete" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
                                 <div class="table-box">
                                     <table class="table table-dark table-striped table-hover">
                                         <thead>
@@ -264,6 +272,13 @@
                     this.fillServices();
                     $('#modal-delete-service').modal('hide');
                 })
+                .catch(() => {
+                    this.errorDelete = true;
+                    $('#modal-delete-service').modal('hide');
+                })
+            },
+            closeWarningDelete: function () {
+                this.errorDelete = false;
             },
             handleEdit(id) {
                 this.selectedService = this.getServiceById(id)[0];

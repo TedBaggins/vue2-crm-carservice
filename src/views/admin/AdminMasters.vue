@@ -15,6 +15,14 @@
                                     <span>Мастера</span>
                                     <button class="btn-base-sm btn-blue float-right" data-toggle="modal" data-target="#modal-add-master">Добавить</button>
                                 </div>
+
+                                <div v-if="errorDelete" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong>Ошибка!</strong> Нельзя удалить мастера, связанного с учетной записью
+                                    <button type="button" @click="closeWarningDelete" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
                                 <div class="table-box">
                                     <table class="table table-dark table-striped table-hover">
                                         <thead>
@@ -285,6 +293,13 @@
                     this.fillMasters();
                     $('#modal-delete-master').modal('hide');
                 })
+                .catch(() => {
+                    this.errorDelete = true;
+                    $('#modal-delete-master').modal('hide');
+                })
+            },
+            closeWarningDelete: function () {
+                this.errorDelete = false;
             },
             handleEdit(id) {
                 this.selectedMaster = this.getMasterById(id)[0];

@@ -6,6 +6,7 @@
                     <div class="form-auth-box box-transparent">
                         <form @submit.prevent="handleLogin">
                             <img class="form-auth-logo" :src="require('@/assets/logo-carservice.png')"/>
+
                             <div class="form-group row">
                                 <label for="form-auth-login" class="col-sm-2 col-form-label">Логин</label>
                                 <div class="col-sm-10">
@@ -34,6 +35,13 @@
                                         <span class="input-error">{{ errors[0] }}</span>
                                     </validation-provider>
                                 </div>
+                            </div>
+
+                            <div v-if="errorLogin" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <span class="alert-danger-message ">Неверный логин или пароль</span>
+                                <button type="button" @click="closeWarning" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
 
                             <div class="form-group">
@@ -69,6 +77,7 @@
         data() {
             return {
                 loading: false,
+                errorLogin: false,
                 message: '',
                 login: '',
                 password: ''
@@ -96,9 +105,15 @@
                         .dispatch(actionTypes.login, formData)
                         .then(() => {
                             this.$router.push({name: 'Home'});
-                        });
+                        })
+                        .catch(() => {
+                            this.errorLogin = true;
+                        })
                 }
                 this.loading = false;
+            },
+            closeWarning() {
+                this.errorLogin = false;
             }
         }
     }
