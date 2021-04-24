@@ -12,6 +12,7 @@ export const actionTypes = {
     getUsers: '[user] getUsers',
     getUsersCount: '[user] getUsersCount',
     deleteUser: '[user] deleteUser',
+    addUser: '[user] addUser',
 }
 
 const actions = {
@@ -58,6 +59,20 @@ const actions = {
                 });
         });
     },
+    [actionTypes.addUser](ctx, {formData}) {
+        return new Promise(resolve => {
+            ctx.commit(mutationTypes.addUserStart);
+            userApi
+                .createUser(formData)
+                .then(data => {
+                    ctx.commit(mutationTypes.addUserSuccess);
+                    resolve(data);
+                })
+                .catch(() => {
+                    ctx.commit(mutationTypes.addUserFailure);
+                });
+        });
+    },
 }
 
 export const mutationTypes = {
@@ -72,6 +87,10 @@ export const mutationTypes = {
     deleteUserStart: '[user] deleteUserStart',
     deleteUserSuccess: '[user] deleteUserSuccess',
     deleteUserFailure: '[user] deleteUserFailure',
+
+    addUserStart: '[user] addAdminStart',
+    addUserSuccess: '[user] addUserSuccess',
+    addUserFailure: '[user] addUserFailure',
 }
 
 const mutations = {
@@ -102,6 +121,10 @@ const mutations = {
     [mutationTypes.deleteUserStart]() {},
     [mutationTypes.deleteUserSuccess]() {},
     [mutationTypes.deleteUserFailure]() {},
+
+    [mutationTypes.addUserStart]() {},
+    [mutationTypes.addUserSuccess]() {},
+    [mutationTypes.addUserFailure]() {},
 }
 
 const getters = {

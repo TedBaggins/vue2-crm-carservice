@@ -12,8 +12,15 @@ const deleteUser = id => {
     return axios.delete(`/users/${id}`);
 }
 
+const createUser = formData => {
+    return axios.post('/users', formData).then(response => response.data);
+    // console.log(formData);
+    // return new Promise(resolve => resolve("Success"));
+}
+
 export default {
     getUsers,
     getUsersCount,
-    deleteUser
+    deleteUser,
+    createUser
 }

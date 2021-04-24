@@ -285,4 +285,36 @@
     button.close:hover {
         color: #fff !important;
     }
+
+    /* SELECT */
+    .vue-select .vs__dropdown-toggle {
+        background: #fff;
+        height: calc(1.5em + .75rem + 2px);
+        padding: .375rem .75rem;
+    }
+    .vue-select .vs__search, .vue-select .vs__search:focus {
+        color: #495057;
+        margin: 0;
+        padding: 0 1px;
+    }
+    .vue-select .vs__selected-options {
+        align-content: center;
+        padding: 0 3px;
+    }
+    .vue-select .vs__actions {
+        padding: 0;
+    }
+    .vue-select .vs__dropdown-option--disabled {
+        color: #495057;
+    }
+    .vue-select .vs__dropdown-menu {
+        color: #495057;
+    }
+    .vue-select .vs__fade-leave-active {
+        transition: none;
+    }
+    .vue-select .vs__selected {
+        margin: 0;
+        padding: 0;
+    }
 </style>
