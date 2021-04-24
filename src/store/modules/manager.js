@@ -9,6 +9,7 @@ const state = {
 }
 
 export const actionTypes = {
+    getAllManagers: '[manager] getAllManagers',
     getManagers: '[manager] getManagers',
     getManagersCount: '[manager] getManagersCount',
     deleteManager: '[manager] deleteManager',
@@ -17,6 +18,20 @@ export const actionTypes = {
 }
 
 const actions = {
+    [actionTypes.getAllManagers](ctx) {
+        return new Promise(resolve => {
+            ctx.commit(mutationTypes.getAllManagersStart);
+            managerApi
+                .getAllManagers()
+                .then(managers => {
+                    ctx.commit(mutationTypes.getAllManagersSuccess, managers);
+                    resolve(managers);
+                })
+                .catch(() => {
+                    ctx.commit(mutationTypes.getAllManagersFailure);
+                });
+        });
+    },
     [actionTypes.getManagers](ctx, {offset}) {
         return new Promise(resolve => {
             ctx.commit(mutationTypes.getManagersStart);
@@ -92,6 +107,10 @@ const actions = {
 }
 
 export const mutationTypes = {
+    getAllManagersStart: '[manager] getAllManagersStart',
+    getAllManagersSuccess: '[manager] getAllManagersSuccess',
+    getAllManagersFailure: '[manager] getAllManagersFailure',
+
     getManagersStart: '[manager] getManagersStart',
     getManagersSuccess: '[manager] getManagersSuccess',
     getManagersFailure: '[manager] getManagersFailure',
@@ -114,6 +133,18 @@ export const mutationTypes = {
 }
 
 const mutations = {
+    [mutationTypes.getAllManagersStart](state) {
+        state.isLoading = true;
+        state.data = null;
+    },
+    [mutationTypes.getAllManagersSuccess](state, payload) {
+        state.isLoading = false;
+        state.data = payload;
+    },
+    [mutationTypes.getAllManagersFailure](state) {
+        state.isLoading = false;
+    },
+
     [mutationTypes.getManagersStart](state) {
         state.isLoading = true;
         state.data = null;

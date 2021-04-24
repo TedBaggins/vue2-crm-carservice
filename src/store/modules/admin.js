@@ -9,6 +9,7 @@ const state = {
 }
 
 export const actionTypes = {
+    getAllAdmins: '[admin] getAllAdmins',
     getAdmins: '[admin] getAdmins',
     getAdminsCount: '[admin] getAdminsCount',
     deleteAdmin: '[admin] deleteAdmin',
@@ -17,6 +18,20 @@ export const actionTypes = {
 }
 
 const actions = {
+    [actionTypes.getAllAdmins](ctx) {
+        return new Promise(resolve => {
+            ctx.commit(mutationTypes.getAllAdminsStart);
+            adminApi
+                .getAllAdmins()
+                .then(admins => {
+                    ctx.commit(mutationTypes.getAllAdminsSuccess, admins);
+                    resolve(admins);
+                })
+                .catch(() => {
+                    ctx.commit(mutationTypes.getAllAdminsFailure);
+                });
+        });
+    },
     [actionTypes.getAdmins](ctx, {offset}) {
         return new Promise(resolve => {
             ctx.commit(mutationTypes.getAdminsStart);
@@ -92,6 +107,10 @@ const actions = {
 }
 
 export const mutationTypes = {
+    getAllAdminsStart: '[admin] getAllAdminsStart',
+    getAllAdminsSuccess: '[admin] getAllAdminsSuccess',
+    getAllAdminsFailure: '[admin] getAllAdminsFailure',
+
     getAdminsStart: '[admin] getAdminsStart',
     getAdminsSuccess: '[admin] getAdminsSuccess',
     getAdminsFailure: '[admin] getAdminsFailure',
@@ -114,6 +133,18 @@ export const mutationTypes = {
 }
 
 const mutations = {
+    [mutationTypes.getAllAdminsStart](state) {
+        state.isLoading = true;
+        state.data = null;
+    },
+    [mutationTypes.getAllAdminsSuccess](state, payload) {
+        state.isLoading = false;
+        state.data = payload;
+    },
+    [mutationTypes.getAllAdminsFailure](state) {
+        state.isLoading = false;
+    },
+
     [mutationTypes.getAdminsStart](state) {
         state.isLoading = true;
         state.data = null;

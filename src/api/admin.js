@@ -1,5 +1,9 @@
 import axios from '@/api/axios';
 
+const getAllAdmins = () => {
+    return axios.get(`/admins/all`).then(response => response.data);
+}
+
 const getAdmins = (limit, offset) => {
     return axios.get(`/admins?limit=${limit}&offset=${offset}`).then(response => response.data);
 }
@@ -21,6 +25,7 @@ const deleteAdmin = id => {
 }
 
 export default {
+    getAllAdmins,
     getAdmins,
     getAdminsCount,
     createAdmin,

@@ -1,5 +1,9 @@
 import axios from '@/api/axios';
 
+const getAllMasters = () => {
+    return axios.get(`/masters/all`).then(response => response.data);
+}
+
 const getMasters = (limit, offset) => {
     return axios.get(`/masters?limit=${limit}&offset=${offset}`).then(response => response.data);
 }
@@ -21,6 +25,7 @@ const deleteMaster = id => {
 }
 
 export default {
+    getAllMasters,
     getMasters,
     getMastersCount,
     createMaster,

@@ -9,6 +9,7 @@ const state = {
 }
 
 export const actionTypes = {
+    getAllMasters: '[master] getAllMasters',
     getMasters: '[master] getMasters',
     getMastersCount: '[master] getMastersCount',
     deleteMaster: '[master] deleteMaster',
@@ -17,6 +18,20 @@ export const actionTypes = {
 }
 
 const actions = {
+    [actionTypes.getAllMasters](ctx) {
+        return new Promise(resolve => {
+            ctx.commit(mutationTypes.getAllMastersStart);
+            masterApi
+                .getAllMasters()
+                .then(masters => {
+                    ctx.commit(mutationTypes.getAllMastersSuccess, masters);
+                    resolve(masters);
+                })
+                .catch(() => {
+                    ctx.commit(mutationTypes.getAllMastersFailure);
+                });
+        });
+    },
     [actionTypes.getMasters](ctx, {offset}) {
         return new Promise(resolve => {
             ctx.commit(mutationTypes.getMastersStart);
@@ -92,6 +107,10 @@ const actions = {
 }
 
 export const mutationTypes = {
+    getAllMastersStart: '[master] getAllMastersStart',
+    getAllMastersSuccess: '[master] getAllMastersSuccess',
+    getAllMastersFailure: '[master] getAllMastersFailure',
+
     getMastersStart: '[master] getMastersStart',
     getMastersSuccess: '[master] getMastersSuccess',
     getMastersFailure: '[master] getMastersFailure',
@@ -114,6 +133,18 @@ export const mutationTypes = {
 }
 
 const mutations = {
+    [mutationTypes.getAllMastersStart](state) {
+        state.isLoading = true;
+        state.data = null;
+    },
+    [mutationTypes.getAllMastersSuccess](state, payload) {
+        state.isLoading = false;
+        state.data = payload;
+    },
+    [mutationTypes.getAllMastersFailure](state) {
+        state.isLoading = false;
+    },
+
     [mutationTypes.getMastersStart](state) {
         state.isLoading = true;
         state.data = null;

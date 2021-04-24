@@ -1,5 +1,9 @@
 import axios from '@/api/axios';
 
+const getAllManagers = () => {
+    return axios.get(`/managers/all`).then(response => response.data);
+}
+
 const getManagers = (limit, offset) => {
     return axios.get(`/managers?limit=${limit}&offset=${offset}`).then(response => response.data);
 }
@@ -21,6 +25,7 @@ const deleteManager = id => {
 }
 
 export default {
+    getAllManagers,
     getManagers,
     getManagersCount,
     createManager,

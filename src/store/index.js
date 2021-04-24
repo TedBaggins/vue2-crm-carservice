@@ -6,6 +6,7 @@ import manager from '@/store/modules/manager';
 import master from '@/store/modules/master';
 import service from '@/store/modules/service';
 import user from '@/store/modules/user';
+import role from '@/store/modules/role';
 
 Vue.use(Vuex)
 
@@ -22,6 +23,7 @@ export default new Vuex.Store({
         manager,
         master,
         service,
-        user
+        user,
+        role
     }
 })
