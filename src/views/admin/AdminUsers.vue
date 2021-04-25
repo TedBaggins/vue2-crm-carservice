@@ -43,9 +43,6 @@
                                             <td>{{translateRoleName(user.role.name)}}</td>
                                             <td>{{getProfileFio(user)}}</td>
                                             <td class="table-buttons-box">
-                                                <button class="btn-base-sm btn-blue" @click="handleEdit(user.id)">
-                                                    <i class="bi bi-pen"></i>
-                                                </button>
                                                 <button class="btn-base-sm btn-red" data-toggle="modal" data-target="#modal-delete-user" @click="handleRemove(user.id)">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
@@ -222,7 +219,22 @@
                                     </div>
                                 </form>
                             </div>
+
+                            <div v-if="errorAddLogin" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <span class="alert-danger-message ">Учетная запись с таким логином уже существует</span>
+                                <button type="button" @click="closeWarning" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <div v-if="errorAddEmail" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <span class="alert-danger-message ">Учетная запись с таким email уже существует</span>
+                                <button type="button" @click="closeWarning" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
                         </div>
+
                         <div class="modal-footer">
                             <button type="submit" form="form-add-user" class="btn-base-sm btn-orange">Отправить</button>
                             <button type="button" class="btn-base-sm btn-gray" data-dismiss="modal">Закрыть</button>
@@ -293,6 +305,8 @@
             return {
                 initialPage: null,
                 removingId: null,
+                errorAddLogin: false,
+                errorAddEmail: false,
                 errorDelete: false,
                 addUserLogin: '',
                 addUserEmail: '',
@@ -437,9 +451,6 @@
             closeWarningDelete: function () {
                 this.errorDelete = false;
             },
-            handleEdit(id) {
-                console.log(id);
-            },
             handleAddUser() {
                 let formData = {
                     login: this.addUserLogin,
@@ -465,6 +476,17 @@
                     this.fillUsers();
                     $('#modal-add-user').modal('hide');
                 })
+                .catch((error) => {
+                    if (error.code == "102") {
+                        this.errorAddLogin = true;
+                    } else if (error.code == "103") {
+                        this.errorAddEmail = true;
+                    }
+                })
+            },
+            closeWarning() {
+                this.errorAddLogin = false;
+                this.errorAddEmail = false;
             },
             onChangeRoleSelect:function(value){
                 this.addUserRoleId = value.id;

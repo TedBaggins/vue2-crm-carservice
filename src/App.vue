@@ -178,7 +178,7 @@
         margin-right: 5px;
     }
     .table-buttons-box {
-        min-width: 140px;
+
     }
 
     .loading-box {

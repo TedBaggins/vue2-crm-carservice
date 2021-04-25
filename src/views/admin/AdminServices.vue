@@ -99,7 +99,7 @@
                                     <div class="form-group row">
                                         <label for="form-add-service-price" class="col-sm-4 col-form-label">Цена</label>
                                         <div class="col-sm-8">
-                                            <validation-provider rules="numbers" v-slot="{ errors }">
+                                            <validation-provider rules="required|numbers" v-slot="{ errors }">
                                                 <input type="text"
                                                        v-model="addServicePrice"
                                                        id="form-add-service-price"

@@ -60,7 +60,7 @@ const actions = {
         });
     },
     [actionTypes.addUser](ctx, {formData}) {
-        return new Promise(resolve => {
+        return new Promise((resolve, reject) => {
             ctx.commit(mutationTypes.addUserStart);
             userApi
                 .createUser(formData)
@@ -68,8 +68,9 @@ const actions = {
                     ctx.commit(mutationTypes.addUserSuccess);
                     resolve(data);
                 })
-                .catch(() => {
+                .catch((error) => {
                     ctx.commit(mutationTypes.addUserFailure);
+                    reject(error.response.data);
                 });
         });
     },

@@ -306,7 +306,7 @@
                 this.editMasterFio = this.selectedMaster.fio;
                 this.editMasterBirthday = this.selectedMaster.birthday;
                 this.editMasterPhone = this.selectedMaster.phone;
-                this.initialDate = Number(this.editMasterBirthday);
+                this.initialDate = this.editMasterBirthday ? Number(this.editMasterBirthday) : null;
                 this.editMasterDatePickerKey += 1;
                 $('#modal-edit-master').modal();
             },

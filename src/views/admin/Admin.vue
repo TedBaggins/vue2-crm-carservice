@@ -306,7 +306,7 @@
                 this.editAdminFio = this.selectedAdmin.fio;
                 this.editAdminBirthday = this.selectedAdmin.birthday;
                 this.editAdminPhone = this.selectedAdmin.phone;
-                this.initialDate = Number(this.editAdminBirthday);
+                this.initialDate = this.editAdminBirthday ? Number(this.editAdminBirthday) : null;
                 this.editAdminDatePickerKey += 1;
                 $('#modal-edit-admin').modal();
             },
