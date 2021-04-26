@@ -8,6 +8,10 @@ const getClients = (limit, offset) => {
     return axios.get(`/clients?limit=${limit}&offset=${offset}`).then(response => response.data);
 }
 
+const getClientById = (clientId) => {
+    return axios.get(`/clients/${clientId}`).then(response => response.data);
+}
+
 const getClientsCount = () => {
     return axios.get(`/clients/count`).then(response => response.data);
 }
@@ -27,6 +31,7 @@ const deleteClient = id => {
 export default {
     getAllClients,
     getClients,
+    getClientById,
     getClientsCount,
     createClient,
     updateClient,

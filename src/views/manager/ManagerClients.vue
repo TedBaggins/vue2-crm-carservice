@@ -36,7 +36,7 @@
                                         <tbody>
                                         <tr v-for="(client, index) in clients" :key="client.id">
                                             <th scope="row">{{index+1}}</th>
-                                            <td><router-link :to="{name: 'ManagerClient', params: { clientid: client.id }}">{{client.fio}}</router-link></td>
+                                            <td><router-link v-if="clients" :to="{name: 'ManagerClient', params: { clientid: client.id }}">{{client.fio}}</router-link></td>
                                             <td>{{client.phone}}</td>
                                             <td>
                                                 <button class="btn-base-sm btn-blue" @click="handleEdit(client.id)">

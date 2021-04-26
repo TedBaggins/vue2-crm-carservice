@@ -2,6 +2,7 @@ import clientApi from '@/api/client';
 
 const state = {
     data: null,
+    selectedClient: null,
     isLoading: false,
     error: null,
     clientsCount: null,
@@ -11,6 +12,7 @@ const state = {
 export const actionTypes = {
     getAllClients: '[client] getAllClients',
     getClients: '[client] getClients',
+    getClientById: '[client] getClientById',
     getClientsCount: '[client] getClientsCount',
     deleteClient: '[client] deleteClient',
     addClient: '[client] addClient',
@@ -43,6 +45,20 @@ const actions = {
                 })
                 .catch(() => {
                     ctx.commit(mutationTypes.getClientsFailure);
+                });
+        });
+    },
+    [actionTypes.getClientById](ctx, {clientId}) {
+        return new Promise(resolve => {
+            ctx.commit(mutationTypes.getClientByIdStart);
+            clientApi
+                .getClientById(clientId)
+                .then(client => {
+                    ctx.commit(mutationTypes.getClientByIdSuccess, client);
+                    resolve(client);
+                })
+                .catch(() => {
+                    ctx.commit(mutationTypes.getClientByIdFailure);
                 });
         });
     },
@@ -114,6 +130,10 @@ export const mutationTypes = {
     getClientsSuccess: '[client] getClientsSuccess',
     getClientsFailure: '[client] getClientsFailure',
 
+    getClientByIdStart: '[client] getClientByIdStart',
+    getClientByIdSuccess: '[client] getClientByIdSuccess',
+    getClientByIdFailure: '[client] getClientByIdFailure',
+
     getClientsCountStart: '[client] getClientsCountStart',
     getClientsCountSuccess: '[client] getClientsCountSuccess',
     getClientsCountFailure: '[client] getClientsCountFailure',
@@ -156,6 +176,18 @@ const mutations = {
         state.isLoading = false;
     },
 
+    [mutationTypes.getClientByIdStart](state) {
+        state.isLoading = true;
+        state.selectedClient = null;
+    },
+    [mutationTypes.getClientByIdSuccess](state, payload) {
+        state.isLoading = false;
+        state.selectedClient = payload;
+    },
+    [mutationTypes.getClientByIdFailure](state) {
+        state.isLoading = false;
+    },
+
     [mutationTypes.getClientsCountStart](state) {
         state.isLoading = true;
         state.clientsCount = null;
@@ -185,6 +217,11 @@ const getters = {
     getClientById: state => id => {
         return state.data.filter(client => {
             return client.id == id;
+        })
+    },
+    getClientCarById: state => id => {
+        return state.selectedClient.cars.filter(car => {
+            return car.id == id;
         })
     },
     getClientsCount: state => () => {

@@ -8,6 +8,7 @@ import service from '@/store/modules/service';
 import user from '@/store/modules/user';
 import role from '@/store/modules/role';
 import client from '@/store/modules/client';
+import car from '@/store/modules/car';
 
 Vue.use(Vuex)
 
@@ -26,6 +27,7 @@ export default new Vuex.Store({
         service,
         user,
         role,
-        client
+        client,
+        car
     }
 })
