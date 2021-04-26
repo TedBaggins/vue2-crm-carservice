@@ -39,7 +39,7 @@ const actions = {
                 .getManagers(state.limit, offset)
                 .then(managers => {
                     ctx.commit(mutationTypes.getManagersSuccess, managers);
-                    managers.sort((a, b) => a.fio > b.fio ? 1 : -1); // sort by fio
+                    // managers.sort((a, b) => a.fio > b.fio ? 1 : -1); // sort by fio
                     resolve(managers);
                 })
                 .catch(() => {

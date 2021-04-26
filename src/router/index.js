@@ -26,13 +26,13 @@ const routes = [
         path: '/admin',
         name: 'Admin',
         // lazy-loaded
-        component: () => import('@/views/admin/Admin.vue')
+        component: () => import('@/views/admin/AdminAdmins.vue')
     },
     {
         path: '/admin/admins',
         name: 'AdminAdmins',
         // lazy-loaded
-        component: () => import('@/views/admin/Admin.vue')
+        component: () => import('@/views/admin/AdminAdmins.vue')
     },
     {
         path: '/admin/managers',
@@ -62,13 +62,37 @@ const routes = [
         path: '/manager',
         name: 'Manager',
         // lazy-loaded
-        component: () => import('@/views/manager/Manager.vue')
+        component: () => import('@/views/manager/ManagerClients.vue')
+    },
+    {
+        path: '/manager/clients',
+        name: 'ManagerClients',
+        // lazy-loaded
+        component: () => import('@/views/manager/ManagerClients.vue')
+    },
+    {
+        path: '/manager/client/:clientid',
+        name: 'ManagerClient',
+        // lazy-loaded
+        component: () => import('@/views/manager/ManagerClient.vue')
+    },
+    {
+        path: '/manager/orders',
+        name: 'ManagerOrders',
+        // lazy-loaded
+        component: () => import('@/views/manager/ManagerOrders.vue')
     },
     {
         path: '/master',
         name: 'Master',
         // lazy-loaded
-        component: () => import('@/views/master/Master.vue')
+        component: () => import('@/views/master/MasterOrders.vue')
+    },
+    {
+        path: '/master/orders',
+        name: 'MasterOrders',
+        // lazy-loaded
+        component: () => import('@/views/master/MasterOrders.vue')
     }
 ]
 

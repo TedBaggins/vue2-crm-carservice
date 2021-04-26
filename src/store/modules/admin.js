@@ -39,7 +39,7 @@ const actions = {
                 .getAdmins(state.limit, offset)
                 .then(admins => {
                     ctx.commit(mutationTypes.getAdminsSuccess, admins);
-                    admins.sort((a, b) => a.fio > b.fio ? 1 : -1); // sort by fio
+                    // admins.sort((a, b) => a.fio > b.fio ? 1 : -1); // sort by fio
                     resolve(admins);
                 })
                 .catch(() => {

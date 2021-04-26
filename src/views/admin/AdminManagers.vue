@@ -364,6 +364,17 @@
             }
             this.fillManagers();
             this.$store.dispatch(managerActionTypes.getManagersCount);
+        },
+        created() {
+            switch (this.$store.state.auth.user.role) {
+                case "manager":
+                    this.$router.push({name: 'Manager'});
+                    break;
+                case "master":
+                    this.$router.push({name: 'Master'});
+                    break;
+                default:
+            }
         }
     }
 </script>

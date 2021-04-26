@@ -531,6 +531,17 @@
             this.$store.dispatch(adminActionTypes.getAllAdmins);
             this.$store.dispatch(managerActionTypes.getAllManagers);
             this.$store.dispatch(masterActionTypes.getAllMasters);
+        },
+        created() {
+            switch (this.$store.state.auth.user.role) {
+                case "manager":
+                    this.$router.push({name: 'Manager'});
+                    break;
+                case "master":
+                    this.$router.push({name: 'Master'});
+                    break;
+                default:
+            }
         }
     }
 </script>

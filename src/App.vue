@@ -174,6 +174,14 @@
     .table-box {
         text-align: center;
     }
+    .table-box a {
+        color: #bcecec;
+        transition: 0.2s;
+    }
+    .table-box a:hover {
+        color: #fff;
+        text-decoration: none;
+    }
     .table-box button:first-child {
         margin-right: 5px;
     }

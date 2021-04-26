@@ -39,7 +39,7 @@ const actions = {
                 .getMasters(state.limit, offset)
                 .then(masters => {
                     ctx.commit(mutationTypes.getMastersSuccess, masters);
-                    masters.sort((a, b) => a.fio > b.fio ? 1 : -1); // sort by fio
+                    // masters.sort((a, b) => a.fio > b.fio ? 1 : -1); // sort by fio
                     resolve(masters);
                 })
                 .catch(() => {

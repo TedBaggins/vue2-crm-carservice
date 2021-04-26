@@ -20,16 +20,16 @@ export default {
     mounted() {
         switch (this.$store.state.auth.user.role) {
             case "admin":
-                this.$router.push('Admin');
+                this.$router.push({name: 'Admin'});
                 break;
             case "manager":
-                this.$router.push('Manager');
+                this.$router.push({name: 'Manager'});
                 break;
             case "master":
-                this.$router.push('Master');
+                this.$router.push({name: 'Master'});
                 break;
             default:
-                this.$router.push('Login');
+                this.$router.push({name: 'Login'});
         }
     }
 }

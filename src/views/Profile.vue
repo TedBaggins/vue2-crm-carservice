@@ -4,8 +4,11 @@
         <div class="container-fluid">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-3">
-                        <LeftMenu/>
+                    <div v-if="isAdmin" class="col-md-3">
+                        <AdminLeftMenu/>
+                    </div>
+                    <div v-if="isManager" class="col-md-3">
+                        <ManagerLeftMenu/>
                     </div>
                     <div class="col-md-9">
                         <Loader v-if="isLoading"/>
@@ -48,7 +51,8 @@
 
 <script>
     import Header from '@/components/Header';
-    import LeftMenu from '@/components/AdminLeftMenu';
+    import AdminLeftMenu from '@/components/AdminLeftMenu';
+    import ManagerLeftMenu from '@/components/ManagerLeftMenu';
     import Loader from '@/components/Loader';
     import {mapState} from "vuex";
     import moment from 'moment/moment';
@@ -57,8 +61,16 @@
         name: 'profile',
         components: {
             Header,
-            LeftMenu,
+            AdminLeftMenu,
+            ManagerLeftMenu,
             Loader,
+        },
+        data() {
+            return {
+                isAdmin: false,
+                isManager: false,
+                isMaster: false,
+            }
         },
         computed: {
             ...mapState({
@@ -74,7 +86,18 @@
 
         },
         mounted() {
-
+            switch (this.$store.state.auth.user.role) {
+                case "admin":
+                    this.isAdmin = true;
+                    break;
+                case "manager":
+                    this.isManager = true;
+                    break;
+                case "master":
+                    this.isMaster = true;
+                    break;
+                default:
+            }
         }
     }
 </script>
@@ -88,6 +111,6 @@
         margin-bottom: 10px;
     }
     .profile-data-value {
-        color: #9dd1d2;
+        color: #bcecec;
     }
 </style>
