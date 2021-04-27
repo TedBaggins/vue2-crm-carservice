@@ -4,6 +4,10 @@ const getServices = (limit, offset) => {
     return axios.get(`/services?limit=${limit}&offset=${offset}`).then(response => response.data);
 }
 
+const getAllServices = () => {
+    return axios.get(`/services/all`).then(response => response.data);
+}
+
 const getServicesCount = () => {
     return axios.get(`/services/count`).then(response => response.data);
 }
@@ -22,6 +26,7 @@ const deleteService = id => {
 
 export default {
     getServices,
+    getAllServices,
     getServicesCount,
     createService,
     updateService,

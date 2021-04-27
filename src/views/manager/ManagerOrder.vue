@@ -54,11 +54,130 @@
                                                 <div class="col-md-3">Статус:</div>
                                                 <div class="col-md-9 order-info-data-value" :class="getCssClassForStatus(order.orderstatus.name)">{{translateStatusName(order.orderstatus.name)}}</div>
                                             </div>
+                                            <hr>
+                                            <div class="row order-info-data-row">
+                                                <div class="col-md-3">Сумма заказа:</div>
+                                                <div class="col-md-9 order-info-data-value">{{order.sum}}</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <div v-if="order" class="content-box box-transparent">
+                                <div class="order-services-box">
+                                    <div class="order-services-title-box">
+                                        <span>Услуги по заказу</span>
+                                        <button class="btn-base-sm btn-blue float-right" data-toggle="modal" data-target="#modal-add-order-service">Добавить</button>
+                                    </div>
+                                    <hr>
+
+                                    <div v-if="errorDeleteOrderService" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <strong>Ошибка!</strong> При удалении возникли неполадки...
+                                        <button type="button" @click="closeWarningDelete" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+
+                                    <div v-if="order.services" class="order-services-info-box">
+                                        <div v-for="service in order.services" :key="service.id" class="order-service-info-data-box">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="row order-service-info-data-row">
+                                                        <div class="col-md-3">Наименование:</div>
+                                                        <div class="col-md-6 order-service-info-data-value">{{service.name}}</div>
+                                                        <div class="col-md-3">
+                                                            <div class="order-service-info-buttons-box">
+                                                                <button class="btn-base-sm btn-red" data-toggle="modal" data-target="#modal-delete-order-service" @click="handleRemoveOrderService(service.ordersservices.id)">
+                                                                    <i class="bi bi-trash"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row order-service-info-data-row">
+                                                        <div class="col-md-3">Цена:</div>
+                                                        <div class="col-md-9 order-service-info-data-value">{{service.price}}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div v-if="!order.services.length">
+                                        Данных не найдено
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modal-add-order-service" tabindex="-1" role="dialog" aria-labelledby="modal-add-order-service-label" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <ValidationObserver v-slot="{ handleSubmit }" ref="formAddOrderService">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modal-add-order-service-label">Добавление услуги в заказ</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="modal-add-order-service-form-box">
+                                <form @submit.prevent="handleSubmit(handleAddOrderService)" id="form-add-order-service">
+                                    <div class="form-group row">
+                                        <label for="form-add-order-service-serviceid" class="col-sm-3">Услуга</label>
+                                        <div class="col-sm-9">
+                                            <validation-provider name="service_id" rules="required" v-slot="{ errors }">
+                                                <vSelect
+                                                    v-if="services"
+                                                    v-model="addOrderServiceName"
+                                                    :options="servicesSelectOptions"
+                                                    :clearable="false"
+                                                    id="form-add-order-service-serviceid"
+                                                    label="name"
+                                                    placeholder="Выберите"
+                                                    class="vue-select"
+                                                    @input="onChangeServiceSelect"
+                                                    @search:blur="onBlurServiceSelect"
+                                                >
+                                                    <span slot="no-options">Совпадений не найдено</span>
+                                                </vSelect>
+                                                <span class="input-error">{{ errors[0] }}</span>
+                                            </validation-provider>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="submit" form="form-add-order-service" class="btn-base-sm btn-orange">Отправить</button>
+                            <button type="button" class="btn-base-sm btn-gray" data-dismiss="modal">Закрыть</button>
+                        </div>
+                    </ValidationObserver>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modal-delete-order-service" tabindex="-1" role="dialog" aria-labelledby="modal-delete-order-service-label" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modal-delete-order-service-label">Удаление услуги из заказа</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="modal-delete-body">
+                            Подтвердите удаление
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn-base-sm btn-orange" @click="confirmRemoveOrderService">Ок</button>
+                        <button type="button" class="btn-base-sm btn-gray" data-dismiss="modal">Отмена</button>
                     </div>
                 </div>
             </div>
@@ -72,8 +191,19 @@
     import Loader from '@/components/Loader';
     import {mapState} from "vuex";
     import {actionTypes as orderActionTypes} from "@/store/modules/order";
+    import {actionTypes as serviceActionTypes} from "@/store/modules/service";
+    import {actionTypes as orderServiceActionTypes} from "@/store/modules/orderservice";
     import {translateStatusName, getCssClassForStatus} from "@/helpers/common";
+    import {ValidationProvider, extend} from "vee-validate";
+    import vSelect from 'vue-select';
     import moment from "moment";
+    import {required} from "vee-validate/dist/rules";
+    import $ from "jquery";
+
+    extend('required', {
+        ...required,
+        message: 'Обязательное поле'
+    });
 
     export default {
         name: 'order',
@@ -81,11 +211,16 @@
             Header,
             LeftMenu,
             Loader,
+            ValidationProvider,
+            vSelect
         },
         data() {
             return {
-                errorDelete: false,
+                errorDeleteOrderService: false,
                 orderId: null,
+                addOrderServiceId: '',
+                addOrderServiceName: '',
+                removingOrderServiceId: null,
             }
         },
         computed: {
@@ -93,6 +228,7 @@
                 isLoading: state => state.order.isLoading,
                 error: state => state.order.error,
                 order: state => state.order.selectedOrder,
+                services: state => state.service.data,
             }),
             createdDate: function() {
                 let created = new Date(Number(this.order.created_at));
@@ -104,7 +240,26 @@
                     return moment(closed).locale("ru").format('LLL');
                 }
                 return null;
-            }
+            },
+            // need for correct vue-select validation
+            computedFormAddOrderService() {
+                return this.$refs.formAddOrderService;
+            },
+            serviceSelected: function() {
+                return this.addOrderServiceId !== '';
+            },
+            // select options for vue-select
+            servicesSelectOptions: function() {
+                let servicesArray = [];
+                for (let service of this.services) {
+                    let serviceObject = {
+                        id: service.id,
+                        name: service.name
+                    }
+                    servicesArray.push(serviceObject);
+                }
+                return servicesArray;
+            },
         },
         methods: {
             fillOrder() {
@@ -112,10 +267,54 @@
             },
             translateStatusName: translateStatusName,
             getCssClassForStatus: getCssClassForStatus,
+            closeWarningDelete: function () {
+                this.errorDeleteOrderService = false;
+            },
+            handleAddOrderService() {
+                let formData = {
+                    order_id: this.orderId,
+                    service_id: this.addOrderServiceId,
+                }
+                this.$store.dispatch(orderServiceActionTypes.addOrderService, {
+                    formData
+                })
+                .then(() => {
+                    // clear fields
+                    this.addOrderServiceId = ''; this.addOrderServiceName = '';
+                    // to clear validation errors
+                    this.$refs.formAddOrderService.reset();
+                    this.fillOrder();
+                    $('#modal-add-order-service').modal('hide');
+                })
+            },
+            handleRemoveOrderService(id) {
+                this.removingOrderServiceId = id;
+            },
+            confirmRemoveOrderService() {
+                this.$store.dispatch(orderServiceActionTypes.deleteOrderService, {
+                    id: this.removingOrderServiceId
+                })
+                .then(() => {
+                    this.fillOrder();
+                    $('#modal-delete-order-service').modal('hide');
+                })
+                .catch(() => {
+                    this.errorDeleteOrderService = true;
+                    $('#modal-delete-order-service').modal('hide');
+                })
+            },
+            onChangeServiceSelect:function(value){
+                this.addOrderServiceId = value.id;
+            },
+            // need for correct vue-select validation
+            onBlurServiceSelect() {
+                this.computedFormAddOrderService.refs.service_id.validate();
+            },
         },
         mounted() {
             this.orderId = this.$route.params.orderid;
             this.fillOrder();
+            this.$store.dispatch(serviceActionTypes.getAllServices);
         },
         created() {
             switch (this.$store.state.auth.user.role) {
@@ -165,4 +364,8 @@
         padding-bottom: 10px;
         border-bottom: 1px solid #5c5e60;
     }
+</style>
+
+<style lang="scss">
+    @import "vue-select/src/scss/vue-select.scss";
 </style>

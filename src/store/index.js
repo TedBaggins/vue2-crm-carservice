@@ -10,6 +10,7 @@ import role from '@/store/modules/role';
 import client from '@/store/modules/client';
 import car from '@/store/modules/car';
 import order from '@/store/modules/order';
+import orderservice from '@/store/modules/orderservice';
 
 Vue.use(Vuex)
 
@@ -30,6 +31,7 @@ export default new Vuex.Store({
         role,
         client,
         car,
-        order
+        order,
+        orderservice
     }
 })

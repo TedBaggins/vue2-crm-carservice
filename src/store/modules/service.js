@@ -10,6 +10,7 @@ const state = {
 
 export const actionTypes = {
     getServices: '[service] getServices',
+    getAllServices: '[service] getAllServices',
     getServicesCount: '[service] getServicesCount',
     deleteService: '[service] deleteService',
     addService: '[service] addService',
@@ -29,6 +30,20 @@ const actions = {
                 })
                 .catch(() => {
                     ctx.commit(mutationTypes.getServicesFailure);
+                });
+        });
+    },
+    [actionTypes.getAllServices](ctx) {
+        return new Promise(resolve => {
+            ctx.commit(mutationTypes.getAllServicesStart);
+            serviceApi
+                .getAllServices()
+                .then(services => {
+                    ctx.commit(mutationTypes.getAllServicesSuccess, services);
+                    resolve(services);
+                })
+                .catch(() => {
+                    ctx.commit(mutationTypes.getAllServicesFailure);
                 });
         });
     },
@@ -96,6 +111,10 @@ export const mutationTypes = {
     getServicesSuccess: '[service] getServicesSuccess',
     getServicesFailure: '[service] getServicesFailure',
 
+    getAllServicesStart: '[service] getAllServicesStart',
+    getAllServicesSuccess: '[service] getAllServicesSuccess',
+    getAllServicesFailure: '[service] getAllServicesFailure',
+
     getServicesCountStart: '[service] getServicesCountStart',
     getServicesCountSuccess: '[service] getServicesCountSuccess',
     getServicesCountFailure: '[service] getServicesCountFailure',
@@ -123,6 +142,18 @@ const mutations = {
         state.data = payload;
     },
     [mutationTypes.getServicesFailure](state) {
+        state.isLoading = false;
+    },
+
+    [mutationTypes.getAllServicesStart](state) {
+        state.isLoading = true;
+        state.data = null;
+    },
+    [mutationTypes.getAllServicesSuccess](state, payload) {
+        state.isLoading = false;
+        state.data = payload;
+    },
+    [mutationTypes.getAllServicesFailure](state) {
         state.isLoading = false;
     },
 

@@ -68,7 +68,7 @@
                                                 <div class="col-md-12">
                                                     <div class="row client-car-info-data-row">
                                                         <div class="col-md-3">Id:</div>
-                                                        <div class="col-md-6 client-info-data-value">{{car.id}}</div>
+                                                        <div class="col-md-6 client-car-info-data-value">{{car.id}}</div>
                                                         <div class="col-md-3">
                                                             <div class="client-car-info-buttons-box">
                                                                 <button class="btn-base-sm btn-blue" @click="handleEdit(car.id)">
@@ -82,23 +82,23 @@
                                                     </div>
                                                     <div class="row client-car-info-data-row">
                                                         <div class="col-md-3">Марка:</div>
-                                                        <div class="col-md-9 client-info-data-value">{{car.mark}}</div>
+                                                        <div class="col-md-9 client-car-info-data-value">{{car.mark}}</div>
                                                     </div>
                                                     <div class="row client-car-info-data-row">
                                                         <div class="col-md-3">Модель:</div>
-                                                        <div class="col-md-9 client-info-data-value">{{car.model}}</div>
+                                                        <div class="col-md-9 client-car-info-data-value">{{car.model}}</div>
                                                     </div>
                                                     <div class="row client-car-info-data-row">
                                                         <div class="col-md-3">Гос. номер:</div>
-                                                        <div class="col-md-9 client-info-data-value">{{car.number}}</div>
+                                                        <div class="col-md-9 client-car-info-data-value">{{car.number}}</div>
                                                     </div>
                                                     <div class="row client-car-info-data-row">
                                                         <div class="col-md-3">Год выпуска:</div>
-                                                        <div class="col-md-9 client-info-data-value">{{car.year}}</div>
+                                                        <div class="col-md-9 client-car-info-data-value">{{car.year}}</div>
                                                     </div>
                                                     <div class="row client-car-info-data-row">
                                                         <div class="col-md-3">Номер ПТС:</div>
-                                                        <div class="col-md-9 client-info-data-value">{{car.passport}}</div>
+                                                        <div class="col-md-9 client-car-info-data-value">{{car.passport}}</div>
                                                     </div>
                                                 </div>
                                             </div>
