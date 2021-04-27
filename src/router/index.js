@@ -89,6 +89,12 @@ const routes = [
         component: () => import('@/views/manager/ManagerOrder.vue')
     },
     {
+        path: '/manager/services',
+        name: 'ManagerServices',
+        // lazy-loaded
+        component: () => import('@/views/manager/ManagerServices.vue')
+    },
+    {
         path: '/master',
         name: 'Master',
         // lazy-loaded
