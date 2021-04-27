@@ -109,6 +109,51 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div v-if="client" class="content-box box-transparent">
+                                <div class="client-orders-box">
+                                    <div class="client-orders-title-box">
+                                        <span>Сведения о заказах</span>
+                                        <button class="btn-base-sm btn-blue float-right" data-toggle="modal" data-target="#modal-add-client-order">Добавить</button>
+                                    </div>
+                                    <hr>
+
+                                    <div v-if="client.orders" class="client-orders-info-box">
+                                        <div v-for="order in client.orders" :key="order.id" class="client-order-info-data-box">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="row client-order-info-data-row">
+                                                        <div class="col-md-3">Id:</div>
+                                                        <div class="col-md-6 client-order-info-data-value">{{order.id}}</div>
+                                                        <div class="col-md-3">
+                                                            <div class="client-order-info-buttons-box">
+<!--                                                                <button class="btn-base-sm btn-blue">-->
+                                                                    <router-link class="btn-base-sm btn-blue" v-if="order" :to="{name: 'ManagerOrder', params: { orderid: order.id }}">Перейти</router-link>
+<!--                                                                </button>-->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row client-order-info-data-row">
+                                                        <div class="col-md-3">Номер заказа:</div>
+                                                        <div class="col-md-9 client-order-info-data-value">{{order.number}}</div>
+                                                    </div>
+                                                    <div class="row client-order-info-data-row">
+                                                        <div class="col-md-3">Дата создания:</div>
+                                                        <div class="col-md-9 client-order-info-data-value">{{order.created_at}}</div>
+                                                    </div>
+                                                    <div class="row client-order-info-data-row">
+                                                        <div class="col-md-3">Сумма заказа:</div>
+                                                        <div class="col-md-9 client-order-info-data-value">{{order.sum}}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div v-if="!client.orders.length">
+                                        Данных не найдено
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -350,6 +395,7 @@
     import {ValidationProvider, extend} from "vee-validate";
     import {required} from "vee-validate/dist/rules";
     import moment from "moment";
+    import {translateStatusName, getCssClassForStatus} from "@/helpers/common";
     import $ from "jquery";
 
     extend('required', {
@@ -401,12 +447,27 @@
             birthday: function() {
                 let birthday = new Date(Number(this.client.birthday));
                 return moment(birthday).locale("ru").format('LL');
-            }
+            },
+            createdDate: function() {
+                // let created = new Date(Number(this.client.created_at));
+                // return moment(created).locale("ru").format('LLL');
+                return '';
+            },
+            closedDate: function() {
+                // if(this.order.closed_at) {
+                //     let closed = new Date(Number(this.order.closed_at));
+                //     return moment(closed).locale("ru").format('LLL');
+                // }
+                // return null;
+                return '';
+            },
         },
         methods: {
             fillClient() {
                 this.$store.dispatch(clientActionTypes.getClientById, {clientId: this.clientId});
             },
+            translateStatusName: translateStatusName,
+            getCssClassForStatus: getCssClassForStatus,
             closeWarningDelete: function () {
                 this.errorDelete = false;
             },
@@ -498,26 +559,39 @@
 
 <style>
     .client-info-title-box,
-    .client-cars-title-box {
+    .client-cars-title-box,
+    .client-orders-title-box {
         margin-bottom: 20px;
         padding-top: 5px;
     }
     .client-info-data-row,
-    .client-car-info-data-row:not(:first-child) {
+    .client-car-info-data-row:not(:first-child),
+    .client-order-info-data-row:not(:first-child) {
         margin-bottom: 10px;
     }
     .client-info-data-value,
-    .client-car-info-data-value {
+    .client-car-info-data-value,
+    .client-order-info-data-value {
         color: #bcecec;
     }
-    .client-car-info-buttons-box {
+    .client-car-info-buttons-box,
+    .client-order-info-buttons-box {
         float: right;
     }
     .client-car-info-buttons-box button:nth-child(2) {
         margin-left: 3px;
         margin-right: 4px;
     }
-    .client-car-info-data-box:not(:last-child) {
+    .client-order-info-buttons-box a {
+        margin-right: 5px;
+        color: #fff;
+    }
+    .client-order-info-buttons-box a:hover {
+        color: #fff;
+        text-decoration: none;
+    }
+    .client-car-info-data-box:not(:last-child),
+    .client-order-info-data-box:not(:last-child){
         margin-bottom: 20px;
         padding-bottom: 10px;
         border-bottom: 1px solid #5c5e60;
