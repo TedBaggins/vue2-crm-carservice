@@ -28,7 +28,7 @@
                                             </div>
                                             <div class="row client-info-data-row">
                                                 <div class="col-md-3">Дата рождения:</div>
-                                                <div class="col-md-9 client-info-data-value">{{client.birthday}}</div>
+                                                <div class="col-md-9 client-info-data-value">{{birthday}}</div>
                                             </div>
                                             <div class="row client-info-data-row">
                                                 <div class="col-md-3">Телефон:</div>
@@ -349,6 +349,7 @@
     import {actionTypes as carActionTypes} from "@/store/modules/car";
     import {ValidationProvider, extend} from "vee-validate";
     import {required} from "vee-validate/dist/rules";
+    import moment from "moment";
     import $ from "jquery";
 
     extend('required', {
@@ -397,6 +398,10 @@
                 client: state => state.client.selectedClient,
             }),
             ...mapGetters(["getClientCarById"]),
+            birthday: function() {
+                let birthday = new Date(Number(this.client.birthday));
+                return moment(birthday).locale("ru").format('LL');
+            }
         },
         methods: {
             fillClient() {

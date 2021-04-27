@@ -1,0 +1,34 @@
+import axios from '@/api/axios';
+
+const getOrders = (limit, offset) => {
+    return axios.get(`/orders?limit=${limit}&offset=${offset}`).then(response => response.data);
+}
+
+const getOrderById = (orderId) => {
+    return axios.get(`/orders/${orderId}`).then(response => response.data);
+}
+
+const getOrdersCount = () => {
+    return axios.get(`/orders/count`).then(response => response.data);
+}
+
+const createOrder = formData => {
+    return axios.post('/orders', formData).then(response => response.data);
+}
+
+const updateOrder = (id, formData) => {
+    return axios.put(`/orders/${id}`, formData).then(response => response.data);
+}
+
+const deleteOrder = id => {
+    return axios.delete(`/orders/${id}`);
+}
+
+export default {
+    getOrders,
+    getOrderById,
+    getOrdersCount,
+    createOrder,
+    updateOrder,
+    deleteOrder
+}

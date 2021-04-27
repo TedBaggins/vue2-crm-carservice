@@ -325,4 +325,15 @@
         margin: 0;
         padding: 0;
     }
+
+    /* TEXT COLORS */
+    .text-blue {
+        color: lightskyblue !important;
+    }
+    .text-green {
+        color: lightgreen !important;
+    }
+    .text-red {
+        color: coral !important;
+    }
 </style>

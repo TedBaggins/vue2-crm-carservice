@@ -45,11 +45,12 @@
         },
         methods: {
             handleLogout() {
+                this.$router.push({name: 'Login'});
                 this.$store
                     .dispatch(actionTypes.logout)
-                    .then(() => {
-                        this.$router.push({name: 'Login'});
-                    });
+                    // .then(() => {
+                    //     this.$router.push({name: 'Login'});
+                    // });
             }
         }
     }
