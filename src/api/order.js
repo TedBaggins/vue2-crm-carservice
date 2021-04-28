@@ -4,12 +4,20 @@ const getOrders = (limit, offset) => {
     return axios.get(`/orders?limit=${limit}&offset=${offset}`).then(response => response.data);
 }
 
+const getSubmittedOrders = (limit, offset) => {
+    return axios.get(`/orders/submitted?limit=${limit}&offset=${offset}`).then(response => response.data);
+}
+
 const getOrderById = (orderId) => {
     return axios.get(`/orders/${orderId}`).then(response => response.data);
 }
 
 const getOrdersCount = () => {
     return axios.get(`/orders/count`).then(response => response.data);
+}
+
+const getSubmittedOrdersCount = () => {
+    return axios.get(`/orders/count/submitted`).then(response => response.data);
 }
 
 const createOrder = formData => {
@@ -30,8 +38,10 @@ const changeOrderStatus = (id, formData) => {
 
 export default {
     getOrders,
+    getSubmittedOrders,
     getOrderById,
     getOrdersCount,
+    getSubmittedOrdersCount,
     createOrder,
     updateOrder,
     deleteOrder,

@@ -105,7 +105,13 @@ const routes = [
         name: 'MasterOrders',
         // lazy-loaded
         component: () => import('@/views/master/MasterOrders.vue')
-    }
+    },
+    {
+        path: '/master/order/:orderid',
+        name: 'MasterOrder',
+        // lazy-loaded
+        component: () => import('@/views/master/MasterOrder.vue')
+    },
 ]
 
 const router = new VueRouter({

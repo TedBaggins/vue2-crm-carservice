@@ -16,7 +16,7 @@
                                         Действия
                                     </div>
                                     <div class="order-actions-buttons-box">
-                                        <button @click="confirmOrder" :disabled="!canOrderBeSubmitted" class="btn-base-sm btn-blue">Подтвердить</button>
+                                        <button @click="submitOrder" :disabled="!canOrderBeSubmitted" class="btn-base-sm btn-blue">Подтвердить</button>
                                         <button @click="closeOrder" :disabled="!canOrderBeClosed" class="btn-base-sm btn-blue">Завершить</button>
                                         <button @click="cancelOrder" :disabled="!canOrderBeCanceled" class="btn-base-sm btn-orange">Отменить</button>
                                     </div>
@@ -81,7 +81,7 @@
                                 <div class="order-services-box">
                                     <div class="order-services-title-box">
                                         <span>Услуги по заказу</span>
-                                        <button class="btn-base-sm btn-blue float-right" data-toggle="modal" data-target="#modal-add-order-service">Добавить</button>
+                                        <button :disabled="isOrderClosedOrCanceled" class="btn-base-sm btn-blue float-right" data-toggle="modal" data-target="#modal-add-order-service">Добавить</button>
                                     </div>
                                     <hr>
 
@@ -101,7 +101,7 @@
                                                         <div class="col-md-6 order-service-info-data-value">{{service.name}}</div>
                                                         <div class="col-md-3">
                                                             <div class="order-service-info-buttons-box">
-                                                                <button class="btn-base-sm btn-red" data-toggle="modal" data-target="#modal-delete-order-service" @click="handleRemoveOrderService(service.ordersservices.id)">
+                                                                <button :disabled="isOrderClosedOrCanceled" class="btn-base-sm btn-red" data-toggle="modal" data-target="#modal-delete-order-service" @click="handleRemoveOrderService(service.ordersservices.id)">
                                                                     <i class="bi bi-trash"></i>
                                                                 </button>
                                                             </div>
@@ -284,7 +284,10 @@
             },
             canOrderBeCanceled: function() {
                 return this.order.orderstatus.name !== "closed";
-            }
+            },
+            isOrderClosedOrCanceled: function() {
+                return this.order.orderstatus.name === "closed" || this.order.orderstatus.name === "canceled";
+            },
         },
         methods: {
             fillOrder() {
@@ -292,7 +295,7 @@
             },
             translateStatusName: translateStatusName,
             getCssClassForStatus: getCssClassForStatus,
-            confirmOrder: function() {
+            submitOrder: function() {
                 let id = this.orderId;
                 let status = this.getStatusByName('submitted for execution')[0];
                 let formData = {

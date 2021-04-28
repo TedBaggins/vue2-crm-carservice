@@ -11,7 +11,9 @@ const state = {
 
 export const actionTypes = {
     getOrders: '[order] getOrders',
+    getSubmittedOrders: '[order] getSubmittedOrders',
     getOrdersCount: '[order] getOrdersCount',
+    getSubmittedOrdersCount: '[order] getSubmittedOrdersCount',
     getOrderById: '[order] getOrderById',
     deleteOrder: '[order] deleteOrder',
     addOrder: '[order] addOrder',
@@ -34,6 +36,20 @@ const actions = {
                 });
         });
     },
+    [actionTypes.getSubmittedOrders](ctx, {offset}) {
+        return new Promise(resolve => {
+            ctx.commit(mutationTypes.getSubmittedOrdersStart);
+            orderApi
+                .getSubmittedOrders(state.limit, offset)
+                .then(orders => {
+                    ctx.commit(mutationTypes.getSubmittedOrdersSuccess, orders);
+                    resolve(orders);
+                })
+                .catch(() => {
+                    ctx.commit(mutationTypes.getSubmittedOrdersFailure);
+                });
+        });
+    },
     [actionTypes.getOrdersCount](ctx) {
         return new Promise(resolve => {
             ctx.commit(mutationTypes.getOrdersCountStart);
@@ -45,6 +61,20 @@ const actions = {
                 })
                 .catch(() => {
                     ctx.commit(mutationTypes.getOrdersCountFailure);
+                });
+        });
+    },
+    [actionTypes.getSubmittedOrdersCount](ctx) {
+        return new Promise(resolve => {
+            ctx.commit(mutationTypes.getSubmittedOrdersCountStart);
+            orderApi
+                .getSubmittedOrdersCount()
+                .then(data => {
+                    ctx.commit(mutationTypes.getSubmittedOrdersCountSuccess, data.count);
+                    resolve(data.count);
+                })
+                .catch(() => {
+                    ctx.commit(mutationTypes.getSubmittedOrdersCountFailure);
                 });
         });
     },
@@ -126,9 +156,17 @@ export const mutationTypes = {
     getOrdersSuccess: '[order] getOrdersSuccess',
     getOrdersFailure: '[order] getOrdersFailure',
 
+    getSubmittedOrdersStart: '[order] getSubmittedOrdersStart',
+    getSubmittedOrdersSuccess: '[order] getSubmittedOrdersSuccess',
+    getSubmittedOrdersFailure: '[order] getSubmittedOrdersFailure',
+
     getOrdersCountStart: '[order] getOrdersCountStart',
     getOrdersCountSuccess: '[order] getOrdersCountSuccess',
     getOrdersCountFailure: '[order] getOrdersCountFailure',
+
+    getSubmittedOrdersCountStart: '[order] getSubmittedOrdersCountStart',
+    getSubmittedOrdersCountSuccess: '[order] getSubmittedOrdersCountSuccess',
+    getSubmittedOrdersCountFailure: '[order] getSubmittedOrdersCountFailure',
 
     getOrderByIdStart: '[order] getOrderByIdStart',
     getOrderByIdSuccess: '[order] getOrderByIdSuccess',
@@ -164,6 +202,18 @@ const mutations = {
         state.isLoading = false;
     },
 
+    [mutationTypes.getSubmittedOrdersStart](state) {
+        state.isLoading = true;
+        state.data = null;
+    },
+    [mutationTypes.getSubmittedOrdersSuccess](state, payload) {
+        state.isLoading = false;
+        state.data = payload;
+    },
+    [mutationTypes.getSubmittedOrdersFailure](state) {
+        state.isLoading = false;
+    },
+
     [mutationTypes.getOrdersCountStart](state) {
         state.isLoading = true;
         state.ordersCount = null;
@@ -173,6 +223,18 @@ const mutations = {
         state.ordersCount = payload;
     },
     [mutationTypes.getOrdersCountFailure](state) {
+        state.isLoading = false;
+    },
+
+    [mutationTypes.getSubmittedOrdersCountStart](state) {
+        state.isLoading = true;
+        state.ordersCount = null;
+    },
+    [mutationTypes.getSubmittedOrdersCountSuccess](state, payload) {
+        state.isLoading = false;
+        state.ordersCount = payload;
+    },
+    [mutationTypes.getSubmittedOrdersCountFailure](state) {
         state.isLoading = false;
     },
 
@@ -209,6 +271,11 @@ const getters = {
     getOrderById: state => id => {
         return state.data.filter(order => {
             return order.id == id;
+        })
+    },
+    getOrderReportById: state => id => {
+        return state.selectedReport.orderreports.filter(report => {
+            return report.id == id;
         })
     },
     getOrdersCount: state => () => {

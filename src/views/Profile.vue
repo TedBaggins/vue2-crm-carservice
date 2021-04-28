@@ -10,6 +10,9 @@
                     <div v-if="isManager" class="col-md-3">
                         <ManagerLeftMenu/>
                     </div>
+                    <div v-if="isMaster" class="col-md-3">
+                        <MasterLeftMenu/>
+                    </div>
                     <div class="col-md-9">
                         <Loader v-if="isLoading"/>
                         <div v-else>
@@ -53,6 +56,7 @@
     import Header from '@/components/Header';
     import AdminLeftMenu from '@/components/AdminLeftMenu';
     import ManagerLeftMenu from '@/components/ManagerLeftMenu';
+    import MasterLeftMenu from '@/components/MasterLeftMenu';
     import Loader from '@/components/Loader';
     import {mapState} from "vuex";
     import moment from 'moment/moment';
@@ -63,6 +67,7 @@
             Header,
             AdminLeftMenu,
             ManagerLeftMenu,
+            MasterLeftMenu,
             Loader,
         },
         data() {
