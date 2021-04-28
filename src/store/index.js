@@ -11,6 +11,7 @@ import client from '@/store/modules/client';
 import car from '@/store/modules/car';
 import order from '@/store/modules/order';
 import orderservice from '@/store/modules/orderservice';
+import status from '@/store/modules/status';
 
 Vue.use(Vuex)
 
@@ -32,6 +33,7 @@ export default new Vuex.Store({
         client,
         car,
         order,
-        orderservice
+        orderservice,
+        status
     }
 })

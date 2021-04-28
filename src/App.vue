@@ -132,6 +132,9 @@
         background-color: #2c2d2f;
         border-color: rgba(44, 45, 47, 0.13);
     }
+    button:disabled {
+        color: #d0d0d0;
+    }
 
     /* LEFT MENU */
     .leftmenu-box {
@@ -293,6 +296,7 @@
     button.close:hover {
         color: #fff !important;
     }
+
 
     /* SELECT */
     .vue-select .vs__dropdown-toggle {

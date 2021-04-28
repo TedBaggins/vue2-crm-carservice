@@ -15,7 +15,8 @@ export const actionTypes = {
     getOrderById: '[order] getOrderById',
     deleteOrder: '[order] deleteOrder',
     addOrder: '[order] addOrder',
-    editOrder: '[order] editOrder'
+    editOrder: '[order] editOrder',
+    changeOrderStatus: '[order] changeOrderStatus'
 }
 
 const actions = {
@@ -104,6 +105,20 @@ const actions = {
                 });
         });
     },
+    [actionTypes.changeOrderStatus](ctx, {id, formData}) {
+        return new Promise(resolve => {
+            ctx.commit(mutationTypes.changeOrderStatusStart);
+            orderApi
+                .changeOrderStatus(id, formData)
+                .then(() => {
+                    ctx.commit(mutationTypes.changeOrderStatusSuccess);
+                    resolve();
+                })
+                .catch(() => {
+                    ctx.commit(mutationTypes.changeOrderStatusFailure);
+                });
+        });
+    },
 }
 
 export const mutationTypes = {
@@ -130,6 +145,10 @@ export const mutationTypes = {
     deleteOrderStart: '[order] deleteOrderStart',
     deleteOrderSuccess: '[order] deleteOrderSuccess',
     deleteOrderFailure: '[order] deleteOrderFailure',
+
+    changeOrderStatusStart: '[order] changeOrderStatusStart',
+    changeOrderStatusSuccess: '[order] changeOrderStatusSuccess',
+    changeOrderStatusFailure: '[order] changeOrderStatusFailure',
 }
 
 const mutations = {
@@ -180,6 +199,10 @@ const mutations = {
     [mutationTypes.deleteOrderStart]() {},
     [mutationTypes.deleteOrderSuccess]() {},
     [mutationTypes.deleteOrderFailure]() {},
+
+    [mutationTypes.changeOrderStatusStart]() {},
+    [mutationTypes.changeOrderStatusSuccess]() {},
+    [mutationTypes.changeOrderStatusFailure]() {},
 }
 
 const getters = {

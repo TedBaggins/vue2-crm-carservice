@@ -11,6 +11,19 @@
                         <Loader v-if="isLoading"/>
                         <div v-else>
                             <div v-if="order" class="content-box box-transparent">
+                                <div class="order-actions-box">
+                                    <div class="order-actions-title-box">
+                                        Действия
+                                    </div>
+                                    <div class="order-actions-buttons-box">
+                                        <button @click="confirmOrder" :disabled="!canOrderBeSubmitted" class="btn-base-sm btn-blue">Подтвердить</button>
+                                        <button @click="closeOrder" :disabled="!canOrderBeClosed" class="btn-base-sm btn-blue">Завершить</button>
+                                        <button @click="cancelOrder" :disabled="!canOrderBeCanceled" class="btn-base-sm btn-orange">Отменить</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div v-if="order" class="content-box box-transparent">
                                 <div class="order-info-title-box">
                                     Информация о заказе
                                 </div>
@@ -189,10 +202,11 @@
     import Header from '@/components/Header';
     import LeftMenu from '@/components/ManagerLeftMenu';
     import Loader from '@/components/Loader';
-    import {mapState} from "vuex";
+    import {mapGetters, mapState} from "vuex";
     import {actionTypes as orderActionTypes} from "@/store/modules/order";
     import {actionTypes as serviceActionTypes} from "@/store/modules/service";
     import {actionTypes as orderServiceActionTypes} from "@/store/modules/orderservice";
+    import {actionTypes as statusActionTypes} from "@/store/modules/status";
     import {translateStatusName, getCssClassForStatus} from "@/helpers/common";
     import {ValidationProvider, extend} from "vee-validate";
     import vSelect from 'vue-select';
@@ -229,7 +243,9 @@
                 error: state => state.order.error,
                 order: state => state.order.selectedOrder,
                 services: state => state.service.data,
+                statuses: state => state.status.data,
             }),
+            ...mapGetters(["getStatusByName"]),
             createdDate: function() {
                 let created = new Date(Number(this.order.created_at));
                 return moment(created).locale("ru").format('LLL');
@@ -260,6 +276,15 @@
                 }
                 return servicesArray;
             },
+            canOrderBeSubmitted: function(){
+                return this.order.orderstatus.name === "created";
+            },
+            canOrderBeClosed: function(){
+                return this.order.orderstatus.name === "completed";
+            },
+            canOrderBeCanceled: function() {
+                return this.order.orderstatus.name !== "closed";
+            }
         },
         methods: {
             fillOrder() {
@@ -267,6 +292,48 @@
             },
             translateStatusName: translateStatusName,
             getCssClassForStatus: getCssClassForStatus,
+            confirmOrder: function() {
+                let id = this.orderId;
+                let status = this.getStatusByName('submitted for execution')[0];
+                let formData = {
+                    status_id: status.id
+                }
+                this.$store.dispatch(orderActionTypes.changeOrderStatus, {
+                    id,
+                    formData
+                })
+                .then(() => {
+                    this.fillOrder();
+                })
+            },
+            closeOrder: function() {
+                let id = this.orderId;
+                let status = this.getStatusByName('closed')[0];
+                let formData = {
+                    status_id: status.id
+                }
+                this.$store.dispatch(orderActionTypes.changeOrderStatus, {
+                    id,
+                    formData
+                })
+                .then(() => {
+                    this.fillOrder();
+                })
+            },
+            cancelOrder: function() {
+                let id = this.orderId;
+                let status = this.getStatusByName('canceled')[0];
+                let formData = {
+                    status_id: status.id
+                }
+                this.$store.dispatch(orderActionTypes.changeOrderStatus, {
+                    id,
+                    formData
+                })
+                .then(() => {
+                    this.fillOrder();
+                })
+            },
             closeWarningDelete: function () {
                 this.errorDeleteOrderService = false;
             },
@@ -315,6 +382,7 @@
             this.orderId = this.$route.params.orderid;
             this.fillOrder();
             this.$store.dispatch(serviceActionTypes.getAllServices);
+            this.$store.dispatch(statusActionTypes.getAllStatuses);
         },
         created() {
             switch (this.$store.state.auth.user.role) {
@@ -331,6 +399,14 @@
 </script>
 
 <style>
+    .order-actions-box {
+        display: flex;
+        justify-content: space-between;
+    }
+    .order-actions-buttons-box button:not(:first-child) {
+        margin-left: 5px;
+    }
+
     .order-info-title-box,
     .order-services-title-box {
         margin-bottom: 20px;

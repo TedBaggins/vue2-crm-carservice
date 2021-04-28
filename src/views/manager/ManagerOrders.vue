@@ -47,6 +47,18 @@
                                         </tbody>
                                     </table>
                                 </div>
+
+                                <div v-if="pagesCount" class="table-paginator-box">
+                                    <paginate
+                                        v-model="initialPage"
+                                        :page-count="pagesCount"
+                                        :click-handler="handlePage"
+                                        :prev-text="'Пред.'"
+                                        :next-text="'След.'"
+                                        :container-class="'paginator-ul'"
+                                        :page-class="'page-item'">
+                                    </paginate>
+                                </div>
                             </div>
                         </div>
                     </div>

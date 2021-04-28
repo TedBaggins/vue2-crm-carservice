@@ -24,11 +24,16 @@ const deleteOrder = id => {
     return axios.delete(`/orders/${id}`);
 }
 
+const changeOrderStatus = (id, formData) => {
+    return axios.put(`/orders/${id}/changestatus`, formData).then(response => response.data);
+}
+
 export default {
     getOrders,
     getOrderById,
     getOrdersCount,
     createOrder,
     updateOrder,
-    deleteOrder
+    deleteOrder,
+    changeOrderStatus
 }
