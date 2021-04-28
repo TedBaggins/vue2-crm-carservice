@@ -1,3 +1,4 @@
+import * as moment from 'moment'
 
 function translateStatusName(name) {
     switch (name) {
@@ -37,7 +38,17 @@ function getCssClassForStatus(name) {
     }
 }
 
-module.exports = {
+function formatDateFromTimestamp(timestamp, mode) {
+    let rawDate = new Date(Number(timestamp));
+    if (mode === "date") {
+        return moment(rawDate).locale("ru").format('LL');
+    } else if (mode === "datetime") {
+        return moment(rawDate).locale("ru").format('LLL');
+    }
+}
+
+export {
     translateStatusName,
     getCssClassForStatus,
+    formatDateFromTimestamp
 }

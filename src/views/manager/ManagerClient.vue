@@ -28,7 +28,7 @@
                                             </div>
                                             <div class="row client-info-data-row">
                                                 <div class="col-md-3">Дата рождения:</div>
-                                                <div class="col-md-9 client-info-data-value">{{birthday}}</div>
+                                                <div class="col-md-9 client-info-data-value">{{formatDateFromTimestamp(client.birthday, "date")}}</div>
                                             </div>
                                             <div class="row client-info-data-row">
                                                 <div class="col-md-3">Телефон:</div>
@@ -127,9 +127,7 @@
                                                         <div class="col-md-6 client-order-info-data-value">{{order.id}}</div>
                                                         <div class="col-md-3">
                                                             <div class="client-order-info-buttons-box">
-<!--                                                                <button class="btn-base-sm btn-blue">-->
-                                                                    <router-link class="btn-base-sm btn-blue" v-if="order" :to="{name: 'ManagerOrder', params: { orderid: order.id }}">Перейти</router-link>
-<!--                                                                </button>-->
+                                                                <router-link class="btn-base-sm btn-blue" v-if="order" :to="{name: 'ManagerOrder', params: { orderid: order.id }}">Перейти</router-link>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -139,7 +137,11 @@
                                                     </div>
                                                     <div class="row client-order-info-data-row">
                                                         <div class="col-md-3">Дата создания:</div>
-                                                        <div class="col-md-9 client-order-info-data-value">{{order.created_at}}</div>
+                                                        <div class="col-md-9 client-order-info-data-value">{{formatDateFromTimestamp(order.created_at, "datetime")}}</div>
+                                                    </div>
+                                                    <div v-if="order.closed_at" class="row client-order-info-data-row">
+                                                        <div class="col-md-3">Дата закрытия:</div>
+                                                        <div class="col-md-9 client-order-info-data-value">{{formatDateFromTimestamp(order.closed_at, "datetime")}}</div>
                                                     </div>
                                                     <div class="row client-order-info-data-row">
                                                         <div class="col-md-3">Сумма заказа:</div>
@@ -253,6 +255,56 @@
                         </div>
                         <div class="modal-footer">
                             <button type="submit" form="form-add-car" class="btn-base-sm btn-orange">Отправить</button>
+                            <button type="button" class="btn-base-sm btn-gray" data-dismiss="modal">Закрыть</button>
+                        </div>
+                    </ValidationObserver>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modal-add-client-order" tabindex="-1" role="dialog" aria-labelledby="modal-add-client-order-label" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <ValidationObserver v-slot="{ handleSubmit }" ref="formAddClientOrder">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modal-add-client-order-label">Создание заказа</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="modal-add-client-order-form-box">
+                                <form @submit.prevent="handleSubmit(handleAddClientOrder)" id="form-add-client-order">
+
+                                    <div v-if="client" class="form-group row">
+                                        <label for="form-add-client-order-carid" class="col-sm-4">Автомобиль</label>
+                                        <div class="col-sm-8">
+                                            <validation-provider name="car_id" rules="required" v-slot="{ errors }">
+                                                <vSelect
+                                                    v-if="client.cars"
+                                                    v-model="addClientOrderCarMark"
+                                                    :options="carsSelectOptions"
+                                                    :clearable="false"
+                                                    id="form-add-client-order-carid"
+                                                    label="mark"
+                                                    placeholder="Выберите"
+                                                    class="vue-select"
+                                                    @input="onChangeCarSelect"
+                                                    @search:blur="onBlurCarSelect"
+                                                >
+                                                    <span slot="no-options">Совпадений не найдено</span>
+                                                </vSelect>
+                                                <span class="input-error">{{ errors[0] }}</span>
+                                            </validation-provider>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="submit" form="form-add-client-order" class="btn-base-sm btn-orange">Отправить</button>
                             <button type="button" class="btn-base-sm btn-gray" data-dismiss="modal">Закрыть</button>
                         </div>
                     </ValidationObserver>
@@ -392,10 +444,11 @@
     import Loader from '@/components/Loader';
     import {actionTypes as clientActionTypes} from "@/store/modules/client";
     import {actionTypes as carActionTypes} from "@/store/modules/car";
+    import {actionTypes as orderActionTypes} from "@/store/modules/order";
     import {ValidationProvider, extend} from "vee-validate";
     import {required} from "vee-validate/dist/rules";
-    import moment from "moment";
-    import {translateStatusName, getCssClassForStatus} from "@/helpers/common";
+    import vSelect from 'vue-select';
+    import {translateStatusName, getCssClassForStatus, formatDateFromTimestamp} from "@/helpers/common";
     import $ from "jquery";
 
     extend('required', {
@@ -416,7 +469,8 @@
             Header,
             LeftMenu,
             Loader,
-            ValidationProvider
+            ValidationProvider,
+            vSelect
         },
         data() {
             return {
@@ -429,6 +483,8 @@
                 addCarNumber: '',
                 addCarYear: '',
                 addCarPassport: '',
+                addClientOrderCarId: '',
+                addClientOrderCarMark: '',
                 editCarMark: '',
                 editCarModel: '',
                 editCarNumber: '',
@@ -442,24 +498,26 @@
                 isLoading: state => state.client.isLoading,
                 error: state => state.client.error,
                 client: state => state.client.selectedClient,
+                profile: state => state.auth.user.profile,
             }),
             ...mapGetters(["getClientCarById"]),
-            birthday: function() {
-                let birthday = new Date(Number(this.client.birthday));
-                return moment(birthday).locale("ru").format('LL');
+            // need for correct vue-select validation
+            computedFormAddClientOrder() {
+                return this.$refs.formAddClientOrder;
             },
-            createdDate: function() {
-                // let created = new Date(Number(this.client.created_at));
-                // return moment(created).locale("ru").format('LLL');
-                return '';
-            },
-            closedDate: function() {
-                // if(this.order.closed_at) {
-                //     let closed = new Date(Number(this.order.closed_at));
-                //     return moment(closed).locale("ru").format('LLL');
-                // }
-                // return null;
-                return '';
+            // select options for vue-select
+            carsSelectOptions: function() {
+                let carsArray = [];
+                if(this.client.cars) {
+                    for (let car of this.client.cars) {
+                        let carObject = {
+                            id: car.id,
+                            mark: `${car.mark} ${car.number}`
+                        }
+                        carsArray.push(carObject);
+                    }
+                }
+                return carsArray;
             },
         },
         methods: {
@@ -468,6 +526,25 @@
             },
             translateStatusName: translateStatusName,
             getCssClassForStatus: getCssClassForStatus,
+            formatDateFromTimestamp: formatDateFromTimestamp,
+            handleAddClientOrder() {
+                let formData = {
+                    client_id: this.clientId,
+                    car_id: this.addClientOrderCarId,
+                    manager_id: this.profile.id
+                }
+                this.$store.dispatch(orderActionTypes.addOrder, {
+                    formData
+                })
+                .then(() => {
+                    // clear fields
+                    this.addOrderCarId = ''; this.addOrderCarMark = '';
+                    // to clear validation errors
+                    this.$refs.formAddClientOrder.reset();
+                    this.fillClient();
+                    $('#modal-add-client-order').modal('hide');
+                })
+            },
             closeWarningDelete: function () {
                 this.errorDelete = false;
             },
@@ -538,6 +615,13 @@
                     $('#modal-add-car').modal('hide');
                 })
             },
+            onChangeCarSelect: function(value) {
+                this.addClientOrderCarId = value.id;
+            },
+            // need for correct vue-select validation
+            onBlurCarSelect() {
+                this.computedFormAddClientOrder.refs.car_id.validate();
+            },
         },
         mounted() {
             this.clientId = this.$route.params.clientid;
@@ -596,4 +680,8 @@
         padding-bottom: 10px;
         border-bottom: 1px solid #5c5e60;
     }
+</style>
+
+<style lang="scss">
+    @import "vue-select/src/scss/vue-select.scss";
 </style>
