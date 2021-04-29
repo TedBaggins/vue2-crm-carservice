@@ -11,6 +11,28 @@
                         <Loader v-if="isLoading"/>
                         <div v-else>
                             <div v-if="orders" class="content-box box-transparent">
+                                <div class="orders-filter-box">
+                                    <div class="orders-filter-title-box">
+                                        Фильтр поиска
+                                    </div>
+                                    <div class="orders-filter-radio-box">
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            <input type="radio" v-model="ordersStatusFilter" @change="changeOrdersStatusFilter" value="submitted" id="radio-orders-filter-submitted" name="radio-orders-filter" class="custom-control-input">
+                                            <label class="custom-control-label" for="radio-orders-filter-submitted">Все</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            <input type="radio" v-model="ordersStatusFilter" @change="changeOrdersStatusFilter" value="new" id="radio-orders-filter-new" name="radio-orders-filter" class="custom-control-input">
+                                            <label class="custom-control-label" for="radio-orders-filter-new">Новые</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            <input type="radio" v-model="ordersStatusFilter" @change="changeOrdersStatusFilter" value="ongoing" id="radio-orders-filter-ongoing" name="radio-orders-filter" class="custom-control-input">
+                                            <label class="custom-control-label" for="radio-orders-filter-ongoing">На выполнении</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div v-if="orders" class="content-box box-transparent">
                                 <div class="table-panel-box">
                                     <span>Заказы</span>
                                 </div>
@@ -72,6 +94,7 @@
         data() {
             return {
                 initialPage: null,
+                ordersStatusFilter: "submitted",
             }
         },
         computed: {
@@ -88,7 +111,7 @@
         },
         methods: {
             fillOrders() {
-                this.$store.dispatch(orderActionTypes.getSubmittedOrders, {offset: this.offset});
+                this.$store.dispatch(orderActionTypes.getSubmittedOrders, {offset: this.offset, status: this.ordersStatusFilter});
             },
             handlePage(pageNum) {
                 this.$router.push({ name: 'MasterOrders', query: { page: pageNum }});
@@ -97,6 +120,10 @@
             },
             translateStatusName: translateStatusName,
             getCssClassForStatus: getCssClassForStatus,
+            changeOrdersStatusFilter() {
+                this.fillOrders();
+                this.$store.dispatch(orderActionTypes.getSubmittedOrdersCount, {status: this.ordersStatusFilter});
+            }
         },
         mounted() {
             if(this.$route.query.page) {
@@ -105,7 +132,7 @@
                 this.initialPage = 1;
             }
             this.fillOrders();
-            this.$store.dispatch(orderActionTypes.getOrdersCount);
+            this.$store.dispatch(orderActionTypes.getSubmittedOrdersCount, {status: this.ordersStatusFilter});
         },
         created() {
             switch (this.$store.state.auth.user.role) {
@@ -120,3 +147,21 @@
         }
     }
 </script>
+
+<style>
+    .orders-filter-box {
+        display: flex;
+        justify-content: space-between;
+    }
+    .orders-filter-radio-box {
+        margin-left: 30px;
+    }
+    .orders-filter-radio-box .custom-control-input:checked~.custom-control-label::before {
+        color: #fff;
+        border-color: rgba(236, 143, 106, 1);
+        background-color: rgba(236, 143, 106, 1);
+    }
+    .orders-filter-radio-box .custom-control-input:focus~.custom-control-label::before {
+        box-shadow: 0 0 0 0.2rem rgba(236, 143, 106, 0.25);
+    }
+</style>

@@ -36,11 +36,11 @@ const actions = {
                 });
         });
     },
-    [actionTypes.getSubmittedOrders](ctx, {offset}) {
+    [actionTypes.getSubmittedOrders](ctx, {offset, status}) {
         return new Promise(resolve => {
             ctx.commit(mutationTypes.getSubmittedOrdersStart);
             orderApi
-                .getSubmittedOrders(state.limit, offset)
+                .getSubmittedOrders(state.limit, offset, status)
                 .then(orders => {
                     ctx.commit(mutationTypes.getSubmittedOrdersSuccess, orders);
                     resolve(orders);
@@ -64,11 +64,11 @@ const actions = {
                 });
         });
     },
-    [actionTypes.getSubmittedOrdersCount](ctx) {
+    [actionTypes.getSubmittedOrdersCount](ctx, {status}) {
         return new Promise(resolve => {
             ctx.commit(mutationTypes.getSubmittedOrdersCountStart);
             orderApi
-                .getSubmittedOrdersCount()
+                .getSubmittedOrdersCount(status)
                 .then(data => {
                     ctx.commit(mutationTypes.getSubmittedOrdersCountSuccess, data.count);
                     resolve(data.count);

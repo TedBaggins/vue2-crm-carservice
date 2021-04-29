@@ -4,8 +4,8 @@ const getOrders = (limit, offset) => {
     return axios.get(`/orders?limit=${limit}&offset=${offset}`).then(response => response.data);
 }
 
-const getSubmittedOrders = (limit, offset) => {
-    return axios.get(`/orders/submitted?limit=${limit}&offset=${offset}`).then(response => response.data);
+const getSubmittedOrders = (limit, offset, status) => {
+    return axios.get(`/orders/submitted?limit=${limit}&offset=${offset}&status=${status}`).then(response => response.data);
 }
 
 const getOrderById = (orderId) => {
@@ -16,8 +16,8 @@ const getOrdersCount = () => {
     return axios.get(`/orders/count`).then(response => response.data);
 }
 
-const getSubmittedOrdersCount = () => {
-    return axios.get(`/orders/count/submitted`).then(response => response.data);
+const getSubmittedOrdersCount = (status) => {
+    return axios.get(`/orders/count/submitted?status=${status}`).then(response => response.data);
 }
 
 const createOrder = formData => {
