@@ -111,7 +111,7 @@
                                 <div v-if="order.orderreports" class="order-reports-box">
                                     <div class="order-reports-title-box">
                                         <span>Отчеты мастера</span>
-                                        <button class="btn-base-sm btn-blue float-right" data-toggle="modal" data-target="#modal-add-report">Добавить</button>
+                                        <button :disabled="!isOrderTakenOrCompleted" class="btn-base-sm btn-blue float-right" data-toggle="modal" data-target="#modal-add-report">Добавить</button>
                                     </div>
                                     <hr>
 
@@ -131,7 +131,7 @@
                                                         <div class="col-md-6 order-report-info-data-value">{{report.description}}</div>
                                                         <div class="col-md-3">
                                                             <div class="order-report-info-buttons-box">
-                                                                <button class="btn-base-sm btn-blue" @click="handleEdit(report.id)">
+                                                                <button :disabled="isOrderClosedOrCanceled" class="btn-base-sm btn-blue" @click="handleEdit(report.id)">
                                                                     <i class="bi bi-pen"></i>
                                                                 </button>
                                                                 <button :disabled="isOrderClosedOrCanceled" class="btn-base-sm btn-red" data-toggle="modal" data-target="#modal-delete-report" @click="handleRemoveReport(report.id)">
@@ -292,6 +292,7 @@
                 addReportDescription: '',
                 editReportDescription: '',
                 removingReportId: null,
+                selectedReport: null
             }
         },
         computed: {
@@ -301,8 +302,9 @@
                 order: state => state.order.selectedOrder,
                 statuses: state => state.status.data,
                 reports: state => state.report.data,
+                profile: state => state.auth.user.profile,
             }),
-            ...mapGetters(["getOrderReportById"]),
+            ...mapGetters(["getOrderReportById", "getStatusByName"]),
             createdDate: function() {
                 let created = new Date(Number(this.order.created_at));
                 return moment(created).locale("ru").format('LLL');
@@ -323,6 +325,9 @@
             isOrderClosedOrCanceled: function() {
                 return this.order.orderstatus.name === "closed" || this.order.orderstatus.name === "canceled";
             },
+            isOrderTakenOrCompleted: function () {
+                return this.order.orderstatus.name === "on execution" || this.order.orderstatus.name === "completed";
+            }
         },
         methods: {
             fillOrder() {
@@ -384,7 +389,7 @@
                 this.editReportDescription = this.selectedReport.description;
                 $('#modal-edit-report').modal();
             },
-            handleEditCar() {
+            handleEditReport() {
                 let id = this.selectedReport.id;
                 let formData = {
                     description: this.editReportDescription,

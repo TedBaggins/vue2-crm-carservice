@@ -274,7 +274,7 @@ const getters = {
         })
     },
     getOrderReportById: state => id => {
-        return state.selectedReport.orderreports.filter(report => {
+        return state.selectedOrder.orderreports.filter(report => {
             return report.id == id;
         })
     },
