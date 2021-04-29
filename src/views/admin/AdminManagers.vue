@@ -17,7 +17,7 @@
                                 </div>
 
                                 <div v-if="errorDelete" class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <strong>Ошибка!</strong> Нельзя удалить менеджера, связанного с учетной записью
+                                    <strong>Ошибка!</strong> При удалении возникли неполадки...
                                     <button type="button" @click="closeWarningDelete" class="close" data-dismiss="alert" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
