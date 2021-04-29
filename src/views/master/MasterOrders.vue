@@ -59,11 +59,13 @@
                                 <div v-if="pagesCount" class="table-paginator-box">
                                     <paginate
                                             v-model="initialPage"
+                                            ref="paginate"
                                             :page-count="pagesCount"
                                             :click-handler="handlePage"
                                             :prev-text="'Пред.'"
                                             :next-text="'След.'"
                                             :container-class="'paginator-ul'"
+                                            :key="initialPage"
                                             :page-class="'page-item'">
                                     </paginate>
                                 </div>
@@ -114,13 +116,23 @@
                 this.$store.dispatch(orderActionTypes.getSubmittedOrders, {offset: this.offset, status: this.ordersStatusFilter});
             },
             handlePage(pageNum) {
-                this.$router.push({ name: 'MasterOrders', query: { page: pageNum }});
+                if (this.ordersStatusFilter === "submitted") {
+                    this.$router.push({ name: 'MasterOrders', query: { page: pageNum }});
+                } else {
+                    this.$router.push({ name: 'MasterOrders', query: { page: pageNum, status: this.ordersStatusFilter }});
+                }
                 this.initialPage = pageNum;
                 this.fillOrders();
             },
             translateStatusName: translateStatusName,
             getCssClassForStatus: getCssClassForStatus,
             changeOrdersStatusFilter() {
+                this.initialPage = 1;
+                if (this.ordersStatusFilter !== "submitted") {
+                    this.$router.push({ name: 'MasterOrders', query: { page: "1", status: this.ordersStatusFilter }});
+                } else {
+                    this.$router.push({ name: 'MasterOrders', query: { page: "1"}});
+                }
                 this.fillOrders();
                 this.$store.dispatch(orderActionTypes.getSubmittedOrdersCount, {status: this.ordersStatusFilter});
             }
@@ -130,6 +142,9 @@
                 this.initialPage = Number(this.$route.query.page);
             } else {
                 this.initialPage = 1;
+            }
+            if(this.$route.query.status) {
+                this.ordersStatusFilter = this.$route.query.status;
             }
             this.fillOrders();
             this.$store.dispatch(orderActionTypes.getSubmittedOrdersCount, {status: this.ordersStatusFilter});

@@ -120,6 +120,28 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div v-if="order" class="content-box box-transparent">
+                                <div v-if="order.orderreports" class="order-reports-box">
+                                    <div class="order-reports-title-box">
+                                        <span>Отчеты мастера</span>
+                                    </div>
+                                    <hr>
+
+                                    <div v-if="order.orderreports" class="order-reports-info-box">
+                                        <div v-for="report in order.orderreports" :key="report.id" class="order-report-info-data-box">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="row order-report-info-data-row">
+                                                        <div class="col-md-3">Содержание:</div>
+                                                        <div class="col-md-9 order-report-info-data-value">{{report.description}}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -411,12 +433,14 @@
     }
 
     .order-info-title-box,
-    .order-services-title-box {
+    .order-services-title-box,
+    .order-reports-title-box {
         margin-bottom: 20px;
         padding-top: 5px;
     }
     .order-info-data-row,
-    .order-service-info-data-row:not(:first-child) {
+    .order-service-info-data-row:not(:first-child),
+    .order-report-info-data-row:not(:first-child) {
         margin-bottom: 10px;
     }
     .order-info-data-row a {
@@ -428,7 +452,8 @@
         text-decoration: none;
     }
     .order-info-data-value,
-    .order-service-info-data-value {
+    .order-service-info-data-value,
+    .order-report-info-data-value {
         color: #bcecec;
     }
     .order-service-info-buttons-box {
@@ -438,7 +463,8 @@
         margin-left: 3px;
         margin-right: 4px;
     }
-    .order-service-info-data-box:not(:last-child) {
+    .order-service-info-data-box:not(:last-child),
+    .order-report-info-data-box:not(:last-child) {
         margin-bottom: 20px;
         padding-bottom: 10px;
         border-bottom: 1px solid #5c5e60;
