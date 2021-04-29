@@ -141,6 +141,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div v-if="!order.orderreports.length">
+                                    Данных не найдено
+                                </div>
                             </div>
                         </div>
                     </div>
