@@ -37,7 +37,7 @@
                                         </thead>
                                         <tbody>
                                         <tr v-for="(user, index) in users" :key="user.id">
-                                            <th scope="row">{{index+1}}</th>
+                                            <th scope="row">{{index+1+offset}}</th>
                                             <td>{{user.login}}</td>
                                             <td>{{user.email}}</td>
                                             <td>{{translateRoleName(user.role.name)}}</td>

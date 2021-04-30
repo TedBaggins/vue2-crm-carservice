@@ -35,7 +35,7 @@
                                         </thead>
                                         <tbody>
                                         <tr v-for="(client, index) in clients" :key="client.id">
-                                            <th scope="row">{{index+1}}</th>
+                                            <th scope="row">{{index+1+offset}}</th>
                                             <td><router-link v-if="clients" :to="{name: 'ManagerClient', params: { clientid: client.id }}">{{client.fio}}</router-link></td>
                                             <td>{{client.phone}}</td>
                                             <td>

@@ -173,12 +173,13 @@
                                         <label for="form-add-report-description" class="col-sm-4 col-form-label">Содержание</label>
                                         <div class="col-sm-8">
                                             <validation-provider rules="required" v-slot="{ errors }">
-                                                <input type="text"
-                                                       v-model="addReportDescription"
-                                                       id="form-add-report-description"
-                                                       class="form-control"
-                                                       name="description"
-                                                >
+<!--                                                <input type="text"-->
+<!--                                                       v-model="addReportDescription"-->
+<!--                                                       id="form-add-report-description"-->
+<!--                                                       class="form-control"-->
+<!--                                                       name="description"-->
+<!--                                                >-->
+                                                <textarea v-model="addReportDescription" class="form-control" id="form-add-report-description" name="description" rows="5"></textarea>
                                                 <span class="input-error">{{ errors[0] }}</span>
                                             </validation-provider>
                                         </div>
@@ -342,7 +343,8 @@
                 let id = this.orderId;
                 let status = this.getStatusByName('on execution')[0];
                 let formData = {
-                    status_id: status.id
+                    status_id: status.id,
+                    master_id: this.profile.id
                 }
                 this.$store.dispatch(orderActionTypes.changeOrderStatus, {
                     id,

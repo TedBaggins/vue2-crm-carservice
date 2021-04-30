@@ -35,7 +35,7 @@
                                         </thead>
                                         <tbody>
                                         <tr v-for="(service, index) in services" :key="service.id">
-                                            <th scope="row">{{index+1}}</th>
+                                            <th scope="row">{{index+1+offset}}</th>
                                             <td>{{service.name}}</td>
                                             <td>{{service.price}}</td>
                                             <td>

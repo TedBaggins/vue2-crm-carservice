@@ -302,7 +302,8 @@
                 return servicesArray;
             },
             canOrderBeSubmitted: function(){
-                return this.order.orderstatus.name === "created";
+                let isOrderHasServices = this.order && this.order.services.length;
+                return this.order.orderstatus.name === "created" && isOrderHasServices;
             },
             canOrderBeClosed: function(){
                 return this.order.orderstatus.name === "completed";

@@ -35,7 +35,7 @@
                                         </thead>
                                         <tbody>
                                         <tr v-for="(admin, index) in admins" :key="admin.id">
-                                            <th scope="row">{{index+1}}</th>
+                                            <th scope="row">{{index+1+offset}}</th>
                                             <td>{{admin.fio}}</td>
                                             <td>{{admin.phone}}</td>
                                             <td>

@@ -50,6 +50,9 @@
     .datepicker-box {
         margin: auto;
     }
+    textarea {
+        resize: none !important;
+    }
 
     /* BUTTONS */
     .btn-base {
